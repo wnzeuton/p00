@@ -1,3 +1,5 @@
+timN -- 2024-10-28 04:20
+Continual updates to design doc based on group feedback. Corrected any errors remaining.
 yinweiZ -- 2024-10-28 00:20
 Updated the design doc per group feedback. Elaborated on user perms, templates, db organization, site map, and tasks.
 willN -- 2024-10-23 23:02
