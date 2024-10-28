@@ -1,3 +1,5 @@
+willN -- 2024-10-28 11:13
+Updated design pdf with new design doc
 timN -- 2024-10-28 04:20
 Continual updates to design doc based on group feedback. Corrected any errors remaining.
 yinweiZ -- 2024-10-28 00:20
