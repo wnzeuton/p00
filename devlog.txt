@@ -1,3 +1,5 @@
+yinweiZ -- 2024-10-28 00:20
+Updated the design doc per group feedback. Elaborated on user perms, templates, db organization, site map, and tasks.
 willN -- 2024-10-23 23:02
 Created Design Doc Overview, Components, Component Relationships, Database, and Task Assignments
 danielP -- 2024-10-23 23:07
