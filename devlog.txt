@@ -1,3 +1,6 @@
+yinweiZ -- 2024-10-29 11:22
+Added template skeletons for the site. Added IDEA files.
+Fixed design doc mistake
 timN -- 2024-10-29 11:35
 added sections on README
 willN -- 2024-10-18 11:22
