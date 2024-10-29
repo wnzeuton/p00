@@ -10,40 +10,40 @@ c = db.cursor()
 # CREATING DATA TABLES
 
 # USER TABLE
-# c.execute('''
-# CREATE TABLE IF NOT EXISTS users (
-#     id INTEGER PRIMARY KEY,
-#     username TEXT UNIQUE,
-#     password TEXT UNIQUE,
-#     email TEXT UNIQUE
-# );
-# ''')
-# 
-# # CATEGORIES TABLE
-# c.execute('''
-# CREATE TABLE IF NOT EXISTS categories (
-#     id INTEGER PRIMARY KEY,
-#     title TEXT UNIQUE
-# );
-# ''')
-# 
-# # POSTS TABLE
-# c.execute('''
-# CREATE TABLE IF NOT EXISTS posts (
-#     id INTEGER PRIMARY KEY,
-#     title TEXT UNIQUE,
-#     date
-# );
-# ''')
-# 
-# # COMMENTS TABLE
-# c.execute('''
-# CREATE TABLE IF NOT EXISTS comments (
-#     id INTEGER PRIMARY KEY,
-#     name TEXT,
-#     age INTEGER
-# );
-# ''')
+c.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY,
+    username TEXT UNIQUE,
+    password TEXT UNIQUE,
+    email TEXT UNIQUE
+);
+''')
+
+# CATEGORIES TABLE
+c.execute('''
+CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY,
+    title TEXT UNIQUE
+);
+''')
+
+# POSTS TABLE
+c.execute('''
+CREATE TABLE IF NOT EXISTS posts (
+    id INTEGER PRIMARY KEY,
+    title TEXT UNIQUE,
+    date
+);
+''')
+
+# COMMENTS TABLE
+c.execute('''
+CREATE TABLE IF NOT EXISTS comments (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    age INTEGER
+);
+''')
 
 db.commit()
 db.close()
