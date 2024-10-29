@@ -10,40 +10,40 @@ c = db.cursor()
 # CREATING DATA TABLES
 
 # USER TABLE
-c.execute('''
-CREATE TABLE IF NOT EXISTS students (
-    id INTEGER PRIMARY KEY,
-    username TEXT UNIQUE,
-    password TEXT UNIQUE,
-    email TEXT UNIQUE
-);
-''')
-
-# CATEGORIES TABLE
-c.execute('''
-CREATE TABLE IF NOT EXISTS students (
-    id INTEGER PRIMARY KEY,
-    title TEXT UNIQUE
-);
-''')
-
-# POSTS TABLE
-c.execute('''
-CREATE TABLE IF NOT EXISTS students (
-    id INTEGER PRIMARY KEY,
-    title TEXT UNIQUE,
-    date
-);
-''')
-
-# COMMENTS TABLE
-c.execute('''
-CREATE TABLE IF NOT EXISTS students (
-    id INTEGER PRIMARY KEY,
-    name TEXT,
-    age INTEGER
-);
-''')
+# c.execute('''
+# CREATE TABLE IF NOT EXISTS users (
+#     id INTEGER PRIMARY KEY,
+#     username TEXT UNIQUE,
+#     password TEXT UNIQUE,
+#     email TEXT UNIQUE
+# );
+# ''')
+# 
+# # CATEGORIES TABLE
+# c.execute('''
+# CREATE TABLE IF NOT EXISTS categories (
+#     id INTEGER PRIMARY KEY,
+#     title TEXT UNIQUE
+# );
+# ''')
+# 
+# # POSTS TABLE
+# c.execute('''
+# CREATE TABLE IF NOT EXISTS posts (
+#     id INTEGER PRIMARY KEY,
+#     title TEXT UNIQUE,
+#     date
+# );
+# ''')
+# 
+# # COMMENTS TABLE
+# c.execute('''
+# CREATE TABLE IF NOT EXISTS comments (
+#     id INTEGER PRIMARY KEY,
+#     name TEXT,
+#     age INTEGER
+# );
+# ''')
 
 db.commit()
 db.close()
@@ -53,34 +53,33 @@ import os
 from flask import Flask, render_template, request, session
 
 app = Flask(__name__)
-app.secret_key = os.urandom(32)
 
 @app.route("/")
 def disp_loginpage():
     return render_template("index.html")
 
 @app.route("/blog")
-def response():
+def blog():
     return render_template("blogpost.html")
 
 @app.route("/edit")
-def response():
+def edit():
     return render_template("editpost.html")
 
 @app.route("/login")
-def response():
+def login():
     return render_template("login.html")
 
 @app.route("/user")
-def response():
+def user():
     return render_template("user.html")
 
 @app.route("/category")
-def response():
+def category():
     return render_template("category.html")
 
 @app.route("/signup")
-def response():
+def signup():
     return render_template("signup.html")
 
 @app.route("/logout")
