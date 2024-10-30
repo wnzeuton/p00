@@ -1,37 +1,37 @@
-yinweiz -- 2024-10-30 15:35
-Removed nonfunctional/failed to install packages
-yinweiz -- 2024-10-30 15:20
-Added templates for blogpost, category, and edit post. Fixed SQL queries for id column.
-willN -- 2024-10-30 11:37
-External README review was generally positive, with foreign emissiary giving
-suggestions on aesthetics, formatting, and readability. We updated 
-accordingly.
-danielP -- 2024-10-30 11:30
-Requirements and completed databased
-yinweiz -- 2024-10-30 11:08
-Upload correct team flag, and purge IDEA folder
-timN -- 2024-10-30 10:54
-Finished off the Install Guide and Launch Code
-willN -- 2024-10-29 19:35
-Added team flag
-danielP -- 2024-10-29 11:48
-Added flask app and databases
-willN -- 2024-10-29 11:40
-Updated TSD
+willN -- 2024-10-23 23:02
+Created Design Doc Overview, Components, Component Relationships, Database, and Task Assignments
+danielP -- 2024-10-23 23:07
+Create Design Doc Component Relationships Visualization, Site Map, and Task Assignments.
+yinweiZ -- 2024-10-28 00:20
+Updated the design doc per group feedback. Elaborated on user perms, templates, db organization, site map, and tasks.
+timN -- 2024-10-28 04:20
+Continual updates to design doc based on group feedback. Corrected any errors remaining.
+willN -- 2024-10-28 11:13
+Updated design pdf with new design doc
+willN -- 2024-10-28 11:22
+Fixed design doc mistake
 yinweiZ -- 2024-10-29 11:22
 Added template skeletons for the site. Added IDEA files.
 Fixed design doc mistake
 timN -- 2024-10-29 11:35
 added sections on README
-willN -- 2024-10-18 11:22
-Fixed design doc mistake
-willN -- 2024-10-28 11:13
-Updated design pdf with new design doc
-timN -- 2024-10-28 04:20
-Continual updates to design doc based on group feedback. Corrected any errors remaining.
-yinweiZ -- 2024-10-28 00:20
-Updated the design doc per group feedback. Elaborated on user perms, templates, db organization, site map, and tasks.
-willN -- 2024-10-23 23:02
-Created Design Doc Overview, Components, Component Relationships, Database, and Task Assignments
-danielP -- 2024-10-23 23:07
-Create Design Doc Component Relationships Visualization, Site Map, and Task Assignments.
+willN -- 2024-10-29 11:40
+Updated TSD
+danielP -- 2024-10-29 11:48
+Added flask app and databases
+willN -- 2024-10-29 19:35
+Added team flag
+timN -- 2024-10-30 10:54
+Finished off the Install Guide and Launch Code
+yinweiz -- 2024-10-30 11:08
+Upload correct team flag, and purge IDEA folder
+danielP -- 2024-10-30 11:30
+Requirements and completed databased
+willN -- 2024-10-30 11:37
+External README review was generally positive, with foreign emissiary giving
+suggestions on aesthetics, formatting, and readability. We updated 
+accordingly.
+yinweiz -- 2024-10-30 15:20
+Added templates for blogpost, category, and edit post. Fixed SQL queries for id column.
+yinweiz -- 2024-10-30 15:35
+Removed nonfunctional/failed to install packages
