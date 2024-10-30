@@ -32,16 +32,21 @@ c.execute('''
 CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY,
     title TEXT UNIQUE,
-    date
+    date DATE,
+    category INTEGER,
+    username TEXT,
+    content TEXT
 );
 ''')
 
 # COMMENTS TABLE
 c.execute('''
 CREATE TABLE IF NOT EXISTS comments (
-    id INTEGER PRIMARY KEY,
-    name TEXT,
-    age INTEGER
+    id INTEGER PRIMARY,
+    content TEXT,
+    date DATE,
+    username TEXT,
+    post_id INTEGER
 );
 ''')
 
