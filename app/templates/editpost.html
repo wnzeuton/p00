@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post</title>
+</head>
+<body>
+<section>
+    <form method="post">
+        <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" value= "{{ title }}" required>
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <textarea id="description" required> {{ description }}</textarea>
+        </div>
+        <div>
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</section>
+</body>
+</html>
