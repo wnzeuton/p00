@@ -1,3 +1,7 @@
+willN -- 2024-10-30 11:37
+External README review was generally positive, with foreign emissiary giving
+suggestions on aesthetics, formatting, and readability. We updated 
+accordingly.
 yinweiz -- 2024-10-30 11:08
 Upload correct team flag, and purge IDEA folder
 timN -- 2024-10-30 10:54
