@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS posts (
 # COMMENTS TABLE
 c.execute('''
 CREATE TABLE IF NOT EXISTS comments (
-    id INTEGER PRIMARY,
+    id INTEGER PRIMARY KEY,
     content TEXT,
     date DATE,
     username TEXT,
