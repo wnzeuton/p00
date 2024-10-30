@@ -1,3 +1,5 @@
+yinweiz -- 2024-10-30 15:35
+Removed nonfunctional/failed to install packages
 yinweiz -- 2024-10-30 15:20
 Added templates for blogpost, category, and edit post. Fixed SQL queries for id column.
 willN -- 2024-10-30 11:37
