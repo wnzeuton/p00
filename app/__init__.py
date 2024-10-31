@@ -55,13 +55,16 @@ db.close()
 
 
 import os
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 
 app = Flask(__name__)
+app.secret_key = os.urandom(32)
+def sign_in_state():
+    return 'username' in session.keys()
 
-@app.route("/")
-def disp_loginpage():
-    return render_template("index.html")
+@app.route("/", methods = ['GET', 'POST'])
+def home():
+    return render_template("index.html", guest = not sign_in_state(), username = session['username'] if sign_in_state() else "")
 
 @app.route("/blog")
 def blog():
@@ -71,10 +74,16 @@ def blog():
 def edit():
     return render_template("editpost.html")
 
-@app.route("/login")
+@app.route("/login", methods = ['GET', 'POST'])
 def login():
-    return render_template("login.html")
-
+    if(sign_in_state()):
+        return redirect('/')
+    user = (request.form.get('username'))
+    if(user != None):
+        session['username'] = request.form.get('username')
+        return redirect('/')   
+    else:
+        return render_template("login.html")
 @app.route("/user")
 def user():
     return render_template("user.html")
@@ -88,8 +97,9 @@ def signup():
     return render_template("signup.html")
 
 @app.route("/logout")
-def disp_logoutpage():
-    return render_template('logout.html')
+def logout():
+    session.pop('username')
+    return redirect('/')
 
 if __name__ == "__main__":
     app.debug = True 

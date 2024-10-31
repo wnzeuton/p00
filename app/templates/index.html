@@ -7,6 +7,10 @@
 </head>
 <body>
   <h1>xbxlobog</h1>
-
+  {% if guest %}
+    <h2>Viewing as guest - <a href="/login">log in</a></h2>
+  {% else %}
+    <h2>Signed in as {{ username }} - <a href="/logout">log out</a></h2>
+  {% endif %}
 </body>
 </html>
