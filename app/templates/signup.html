@@ -6,7 +6,9 @@
     <h1>
       Create an account!
     </h1>
-    <h4>{{ message }}</h4>
+    {% for error in message %}
+    <h4>{{ error }}</h4>
+    {% endfor %}
     <h3>
       Please enter the information below.
     </h3>

@@ -103,7 +103,8 @@ def login():
         if(user == None):
             return render_template("login.html", message = 'No such user with that email')
         print(password_hash(request.form.get('password'), user[4])[0])
-        if(password_hash(request.form.get('password'), user[4])[0] != user[3]):
+        if(password_hash(request.form.get('password'), user[4])[0]
+            != user[3]):
             return render_template("login.html", message = "Incorrect password")
         session['user'] = user
         return redirect('/')   
@@ -119,34 +120,37 @@ def category():
 
 @app.route("/signup", methods = ['GET', 'POST'])
 def signup():
-    error = ""
+    error = []
     if(len(request.form) != 0):
         pwd_salt = password_hash(request.form.get('password'), "")
         new_user = (request.form.get('username').lower(), request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email').lower())
-        if(request.form.get('password') != request.form.get('confirm_password')):
-            error = "Passwords do not match"
-        if any(c in " `~!@#$%^&*()=+[]\{\}\|,./<>?;\':\"" for c in request.form.get('username')):
-            error = "Username shouldn't contain special characters"
-        if(error == ""):
-            conn = sqlite3.connect('xase.db')
-            c = conn.cursor()
-            try:
-                c.execute('''
-                INSERT INTO users (normalized_username, username, password, salt, email) VALUES (?, ?, ?, ?, ?)
-                ''', new_user)
-                conn.commit()
-                c.execute("SELECT MAX(Id) FROM users")
-                session['user'] = (c.fetchone(), new_user[0], new_user[1], new_user[2], new_user[3], new_user[4])
-            except sqlite3.IntegrityError:
-                error = "An account with that username or email already exists"
-                conn.rollback()
-            except sqlite3.Error as e:
-                error = f"UNKOWN ERROR: {e} - CONTACT DEVELOPERS FOR HELP"
-                conn.rollback()
-            finally:
-                c.close()
-                conn.close()
-    if(error == "" and len(request.form) != 0):
+        conn = sqlite3.connect('xase.db')
+        c = conn.cursor()
+        try:
+            c.execute('''
+            INSERT INTO users (normalized_username, username, password, salt, email) VALUES (?, ?, ?, ?, ?)
+            ''', new_user)
+            conn.commit()
+            c.execute("SELECT MAX(Id) FROM users")
+            session['user'] = (c.fetchone(), new_user[0], new_user[1], new_user[2], new_user[3], new_user[4])
+        except sqlite3.IntegrityError:
+            error.append("An account with that username or email already exists")
+            conn.rollback()
+        except sqlite3.Error as e:
+            error.append(f"ERROR: {e} - CONTACT DEVELOPERS FOR HELP")
+            conn.rollback()
+        finally:
+            c.close()
+            conn.close()
+        if(len(error) == 0):
+            if any(c in " `~!@#$%^&*()=+[]\{\}\|,./<>?;\':\"" for c in request.form.get('username')):
+                error.append("Username shouldn't contain special characters")
+            if(len(request.form.get('password')) < 10):
+                error.append("Password must be at least 10 characters long")
+            if(request.form.get('password') != request.form.get('confirm_password')):
+                error.append("Passwords do not match")
+        
+    if(len(error) == 0 and len(request.form) != 0):
         print(session['user'])
         return redirect('/')
     return render_template("signup.html", message = error)
