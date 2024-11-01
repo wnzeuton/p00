@@ -15,11 +15,23 @@ c = db.cursor()
 c.execute('''
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    normalized_username TEXT NOT NULL UNIQUE,
-    username TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE COLLATE NOCASE,
     password TEXT NOT NULL,
     salt TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE
+    email TEXT NOT NULL UNIQUE COLLATE NOCASE
+);
+''')
+
+#BLOG Table
+c.execute('''
+CREATE TABLE IF NOT EXISTS blogs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    category_id INTEGER,
+    author_id INTEGER,
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (author_id) REFERENCES users(id)
 );
 ''')
 
@@ -27,7 +39,7 @@ CREATE TABLE IF NOT EXISTS users (
 c.execute('''
 CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT UNIQUE
+    title TEXT UNIQUE COLLATE NOCASE
 );
 ''')
 
@@ -36,10 +48,11 @@ c.execute('''
 CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT,
-    date DATE,
-    category INTEGER,
+    date DATE DEFAULT CURRENT_TIMESTAMP,
     author_id INTEGER,
+    blog_id INTEGER,
     content TEXT,
+    FOREIGN KEY (blog_id) REFERENCES blogs(id),
     FOREIGN KEY (author_id) REFERENCES users(id)
 );
 ''')
@@ -49,7 +62,7 @@ c.execute('''
 CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT,
-    date DATE,
+    date DATE DEFAULT CURRENT_TIMESTAMP,
     author_id INTEGER,
     post_id INTEGER,
     FOREIGN KEY (post_id) REFERENCES posts(id),
@@ -77,7 +90,7 @@ def password_hash(password, salt):
     return [bcrypt.hashpw(password.encode('utf-8'), salt), salt]
 @app.route("/", methods = ['GET', 'POST'])
 def home():
-    return render_template("index.html", guest = not sign_in_state(), username = session['user'][2] if sign_in_state() else "")
+    return render_template("index.html", guest = not sign_in_state(), username = session['user'][1] if sign_in_state() else "")
 
 @app.route("/blog")
 def blog():
@@ -107,7 +120,7 @@ def login():
             conn.close()
         if(user == None):
             return render_template("login.html", message = 'No such user with that email')
-        if(password_hash(request.form.get('password'), user[4])[0] != user[3]):
+        if(password_hash(request.form.get('password'), user[3])[0] != user[2]):
             return render_template("login.html", message = "Incorrect password")
         session['user'] = user
         return redirect('/')   
@@ -126,20 +139,21 @@ def signup():
     error = []
     if(len(request.form) != 0):
         pwd_salt = password_hash(request.form.get('password'), "")
-        new_user = (request.form.get('username').lower(), request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email').lower())
+        new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
         conn = sqlite3.connect('xase.db')
         c = conn.cursor()
         try:
             c.execute('''
-            INSERT INTO users (normalized_username, username, password, salt, email) VALUES (?, ?, ?, ?, ?)
+            INSERT INTO users (username, password, salt, email) VALUES (?, ?, ?, ?)
             ''', new_user)
-           
-           
         except sqlite3.IntegrityError:
             error.append("An account with that username or email already exists")
             conn.rollback()
         except sqlite3.Error as e:
             error.append(f"ERROR: {e} - CONTACT DEVELOPERS FOR HELP")
+            conn.rollback()
+        except Exception as e:
+            error.append(str(e))
             conn.rollback()
         finally:
             if(len(error) == 0):
@@ -153,14 +167,13 @@ def signup():
                 conn.rollback()
             else:
                 conn.commit()
-                session['user'] = (c.fetchone(), new_user[0], new_user[1], new_user[2], new_user[3], new_user[4])
+                session['user'] = (c.lastrowid, new_user[0], new_user[1], new_user[2], new_user[3])
             c.close()
             conn.close()
-        
-        
     if(len(error) == 0 and len(request.form) != 0):
-        print(session['user'])
         return redirect('/')
+    if(len(request.form) == 0):
+        error = []
     return render_template("signup.html", message = error)
 
 @app.route("/logout")
