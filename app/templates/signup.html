@@ -6,10 +6,11 @@
     <h1>
       Create an account!
     </h1>
+    <h4>{{ message }}</h4>
     <h3>
       Please enter the information below.
     </h3>
-    <form action="/">
+    <form action="/signup" method="POST">
       <input type="text" name="username" placeholder="username"><br>
       <input type ="email" name="email" placeholder="email"><br>
       <input type="password" name = "password" placeholder="password"><br>
