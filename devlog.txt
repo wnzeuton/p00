@@ -31,7 +31,17 @@ willN -- 2024-10-30 11:37
 External README review was generally positive, with foreign emissiary giving
 suggestions on aesthetics, formatting, and readability. We updated 
 accordingly.
-yinweiz -- 2024-10-30 15:20
+yinweiZ -- 2024-10-30 15:20
 Added templates for blogpost, category, and edit post. Fixed SQL queries for id column.
-yinweiz -- 2024-10-30 15:35
+yinweiZ -- 2024-10-30 15:35
 Removed nonfunctional/failed to install packages
+willN -- 2024-10-31 22:30
+Auto-incrementing IDs: All IDs now automatically increment upon insertion.
+User Table Enhancements: The users table has been updated to include both “normalized_username” (in lowercase) and “username.” This allows for recognition of multiple capitalizations as the same while preserving the user’s preferred capitalization.
+Relational Tables: The tables are now relational, complete with FOREIGN KEY indicators.
+Clarified Key Names: Certain key names have been updated for better clarity.
+Expanded User Table: The users table now contains numerous additional keys, which are detailed below.
+User Authentication Module: Users can now create accounts, allowing their details to be added to the users database, including a hashed password and its corresponding salt for encryption.
+Login Functionality: A login feature has been implemented and is functioning as expected
+
+UAM is effectively completed. requirements.txt may need to be updated. DD needs to be updated.
