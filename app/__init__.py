@@ -2,7 +2,7 @@
 
 import sqlite3, csv
 import bcrypt
-import hashlib
+
 DB_FILE = "xase.db"
 
 db = sqlite3.connect(DB_FILE)
@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     normalized_username TEXT NOT NULL UNIQUE,
     username TEXT NOT NULL,
     password TEXT NOT NULL,
+    salt TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE
 );
 ''')
@@ -65,14 +66,14 @@ from flask import Flask, render_template, request, session, redirect
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 def sign_in_state():
-    return 'username' in session.keys()
-def password_hash(password):
-    salt = str(bcrypt.gensalt())
-    hashed = hashlib.md5((password+salt).encode())
-    return hashed.hexdigest()
+    return 'user' in session.keys() and session['user'] != None
+def password_hash(password, salt):
+    if(salt == ""):
+        salt = bcrypt.gensalt()
+    return [bcrypt.hashpw(password.encode('utf-8'), salt), salt]
 @app.route("/", methods = ['GET', 'POST'])
 def home():
-    return render_template("index.html", guest = not sign_in_state(), username = session['username'] if sign_in_state() else "")
+    return render_template("index.html", guest = not sign_in_state(), username = session['user'][2] if sign_in_state() else "")
 
 @app.route("/blog")
 def blog():
@@ -84,14 +85,30 @@ def edit():
 
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
+    error = ""
     if(sign_in_state()):
         return redirect('/')
-    user = (request.form.get('username'))
-    if(user != None):
-        session['username'] = request.form.get('username')
+    email = (request.form.get('email'))
+    if(email != None):
+        conn = sqlite3.connect('xase.db')
+        c = conn.cursor()
+        try:
+            c.execute('SELECT * FROM users WHERE email = ?', (email.lower(),))
+            user = c.fetchone()
+        except sqlite3.Error as e:
+            error = e
+        finally:
+            c.close()
+            conn.close()
+        if(user == None):
+            return render_template("login.html", message = 'No such user with that email')
+        print(password_hash(request.form.get('password'), user[4])[0])
+        if(password_hash(request.form.get('password'), user[4])[0] != user[3]):
+            return render_template("login.html", message = "Incorrect password")
+        session['user'] = user
         return redirect('/')   
     else:
-        return render_template("login.html")
+        return render_template("login.html", message = error)
 @app.route("/user")
 def user():
     return render_template("user.html")
@@ -104,34 +121,39 @@ def category():
 def signup():
     error = ""
     if(len(request.form) != 0):
-        new_user = (request.form.get('username').lower(), request.form.get('username'), password_hash(request.form.get('password')), request.form.get('email').lower())
+        pwd_salt = password_hash(request.form.get('password'), "")
+        new_user = (request.form.get('username').lower(), request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email').lower())
         if(request.form.get('password') != request.form.get('confirm_password')):
             error = "Passwords do not match"
-        if any(c in "`~!@#$%^&*()=+[]\{\}\|,./<>?;\':\"" for c in request.form.get('password')):
+        if any(c in " `~!@#$%^&*()=+[]\{\}\|,./<>?;\':\"" for c in request.form.get('username')):
             error = "Username shouldn't contain special characters"
         if(error == ""):
             conn = sqlite3.connect('xase.db')
             c = conn.cursor()
             try:
                 c.execute('''
-                INSERT INTO users (normalized_username, username, password, email) VALUES (?, ?, ?, ?)
+                INSERT INTO users (normalized_username, username, password, salt, email) VALUES (?, ?, ?, ?, ?)
                 ''', new_user)
                 conn.commit()
+                c.execute("SELECT MAX(Id) FROM users")
+                session['user'] = (c.fetchone(), new_user[0], new_user[1], new_user[2], new_user[3], new_user[4])
             except sqlite3.IntegrityError:
                 error = "An account with that username or email already exists"
+                conn.rollback()
             except sqlite3.Error as e:
                 error = f"UNKOWN ERROR: {e} - CONTACT DEVELOPERS FOR HELP"
+                conn.rollback()
             finally:
                 c.close()
                 conn.close()
     if(error == "" and len(request.form) != 0):
-        session['username'] = request.form.get('username')
+        print(session['user'])
         return redirect('/')
     return render_template("signup.html", message = error)
 
 @app.route("/logout")
 def logout():
-    session.pop('username')
+    session.pop('user')
     return redirect('/')
 
 if __name__ == "__main__":
