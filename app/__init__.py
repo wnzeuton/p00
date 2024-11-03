@@ -177,7 +177,8 @@ def signup():
     return render_template("signup.html", message = error)
 @app.route("/logout")
 def logout():
-    session.pop('user')
+    if(sign_in_state()):
+        session.pop('user')
     return redirect('/')
 @app.route("/profile", methods = ['GET', 'POST'])
 def profile():
