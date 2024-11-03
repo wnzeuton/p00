@@ -45,3 +45,9 @@ User Authentication Module: Users can now create accounts, allowing their detail
 Login Functionality: A login feature has been implemented and is functioning as expected
 
 UAM is effectively completed. requirements.txt may need to be updated. DD needs to be updated.
+willN -- 2024-11-02 23:06
+Database:
+	 -Small update to include cascade deletion with relational tables
+	 -Created clear_db.py for developers to simply clear all tables
+User Authentification Module:
+	 -Allowed users to change email, password, and username
