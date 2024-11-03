@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS blogs (
     description TEXT,
     category_id INTEGER,
     author_id INTEGER,
+    html TEXT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -123,13 +124,13 @@ def home():
     return render_template("index.html", guest = not sign_in_state(), username = session['user'][1] if sign_in_state() else "")
 
 # Generates Blog HTML
-def gen_html(title, author, category, content):
+def gen_html(title, author, category, description):
     post_html = f'''
         <div>
-            <h2>{escape(title)}</h2>
-            <p>Category: {escape(category)}</p>
-            <p>Created by {escape(author)}</p>
-            <div>{escape(content)}</div>
+            <h2>{title}</h2>
+            <p>Category: {category}</p>
+            <p>Created by {author}</p>
+            <div>{description}</div>
         </div>
         '''
     return post_html
@@ -137,20 +138,37 @@ def gen_html(title, author, category, content):
 #BLOG PAGE (CONTAINS ALL POSTS)
 @app.route("/blogs", methods=['GET', 'POST'])
 def blog():
-    #Add a blog
     if request.method == 'POST':
-        #Form content
         title = request.form.get('title')
         description = request.form.get('description')
         category = request.form.get('category')
-        author = session['user']
 
-        if title and description:
+        if title and description and category:
             conn = sqlite3.connect('xase.db')
-            ## INSERT BLOG HERE
-            conn.close()
+            c = conn.cursor()
 
-    #Show all blogs
+            author_id = session['user'][0]
+
+            # Get category ID from the category name
+            c.execute("SELECT id FROM categories WHERE title = ?", (category,))
+            category_id = c.fetchone()
+
+            if category_id:
+                # Insert the blog into the database
+                try:
+                    c.execute(
+                        "INSERT INTO blogs (title, description, category_id, author_id) VALUES (?, ?, ?, ?)",
+                        (title, description, category_id[0], author_id, gen_html(title, session['user'], category, description))
+                    )
+                    conn.commit()
+                except sqlite3.Error as e:
+                    print(f"Error inserting blog: {e}")
+                    conn.rollback()
+                finally:
+                    conn.close()
+            else:
+                print("Category not found")
+
     conn = sqlite3.connect('xase.db')
     c = conn.cursor()
     c.execute('SELECT * FROM posts')
