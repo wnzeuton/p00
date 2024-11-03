@@ -6,8 +6,20 @@
     <title>Browse by Categories</title>
 </head>
 <body>
-    <section>
-
-    </section>
+    <h2>Categories</h2>
+    <form method="POST">
+        <div>
+            <label for="category">Category</label>
+            <select name="category" id="category">
+                {% for category in categories %}
+                    <option value="{{category}}">{{category}}</option>
+                    {{ blog }}
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <button type="submit">Save</button>
+        </div>
+    </form>
 </body>
 </html>

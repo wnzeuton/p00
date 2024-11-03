@@ -70,6 +70,32 @@ CREATE TABLE IF NOT EXISTS comments (
 );
 ''')
 
+
+categories_list = [
+    "Art/Music",
+    "Technology",
+    "Science",
+    "Health",
+    "Travel",
+    "Food",
+    "Lifestyle",
+    "Education",
+    "Finance",
+    "Sports",
+    "Fashion",
+    "Business",
+    "Politics",
+    "Environment",
+    "History",
+    "Other"
+]
+
+for category in categories_list:
+    try:
+        c.execute("INSERT INTO categories (title) VALUES (?)", (category,))
+    except sqlite3.IntegrityError:
+        print(f"Category '{category}' already exists in the database.")
+
 db.commit()
 db.close()
 
@@ -97,11 +123,11 @@ def home():
     return render_template("index.html", guest = not sign_in_state(), username = session['user'][1] if sign_in_state() else "")
 
 # Generates Blog HTML
-def gen_html(title, date, author, content):
+def gen_html(title, author, category, content):
     post_html = f'''
         <div>
             <h2>{escape(title)}</h2>
-            <p>Created on {escape(date)}</p>
+            <p>Category: {escape(category)}</p>
             <p>Created by {escape(author)}</p>
             <div>{escape(content)}</div>
         </div>
@@ -113,15 +139,15 @@ def gen_html(title, date, author, content):
 def blog():
     #Add a blog
     if request.method == 'POST':
+        #Form content
         title = request.form.get('title')
         description = request.form.get('description')
+        category = request.form.get('category')
+        author = session['user']
+
         if title and description:
             conn = sqlite3.connect('xase.db')
-            # Here you would handle storing the title and description in the DB
-            # Example:
-            # cursor = conn.cursor()
-            # cursor.execute("INSERT INTO blogs (title, description) VALUES (?, ?)", (title, description))
-            # conn.commit()
+            ## INSERT BLOG HERE
             conn.close()
 
     #Show all blogs
@@ -130,10 +156,7 @@ def blog():
     c.execute('SELECT * FROM posts')
     posts_list = c.fetchall()
     conn.close()
-
-    return render_template("blogpost.html", guest = not sign_in_state(), posts = posts_list)
-
-
+    return render_template("blogpost.html", guest = not sign_in_state(), posts = posts_list, categories = categories_list)
 
 #EDIT AND CREATE POSTS
 @app.route("/edit")
@@ -174,7 +197,7 @@ def user():
 
 @app.route("/category")
 def category():
-    return render_template("category.html")
+    return render_template("category.html", categories = categories_list)
 
 @app.route("/signup", methods = ['GET', 'POST'])
 def signup():

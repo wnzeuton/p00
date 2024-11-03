@@ -22,10 +22,21 @@
             <textarea id="description" required></textarea>
         </div>
         <div>
+            <label for="category">Category</label>
+            <select name="category" id="category">
+                {% for category in categories %}
+                    <option value="{{category}}">{{category}}</option>
+                    {{ blog }}
+                {% endfor %}
+            </select>
+        </div>
+        <div>
             <button type="submit">Save</button>
         </div>
     </form>
     {% endif %}
+
+    <h4>View by <a href="category">categories</a></h4>
 
     {% for blog in blogs %}
         {{ blog }}
