@@ -143,6 +143,8 @@ def blog():
         description = request.form.get('description')
         category = request.form.get('category')
 
+        print(title, description, category)
+
         if title and description and category:
             conn = sqlite3.connect('xase.db')
             c = conn.cursor()
@@ -157,8 +159,8 @@ def blog():
                 # Insert the blog into the database
                 try:
                     c.execute(
-                        "INSERT INTO blogs (title, description, category_id, author_id) VALUES (?, ?, ?, ?)",
-                        (title, description, category_id[0], author_id, gen_html(title, session['user'], category, description))
+                        "INSERT INTO blogs (title, description, category_id, author_id, html) VALUES (?, ?, ?, ?, ?)",
+                        (title, description, category_id[0], author_id, gen_html(title, session['user'][1], category, description))
                     )
                     conn.commit()
                 except sqlite3.Error as e:
@@ -171,10 +173,10 @@ def blog():
 
     conn = sqlite3.connect('xase.db')
     c = conn.cursor()
-    c.execute('SELECT * FROM posts')
-    posts_list = c.fetchall()
+    c.execute('SELECT html FROM blogs')
+    blogs_list = c.fetchall()
     conn.close()
-    return render_template("blogpost.html", guest = not sign_in_state(), posts = posts_list, categories = categories_list)
+    return render_template("blogpost.html", guest = not sign_in_state(), blogs = blogs_list, categories = categories_list)
 
 #EDIT AND CREATE POSTS
 @app.route("/edit")

@@ -6,27 +6,27 @@
     <title>Blog Post</title>
 </head>
 <body>
+    <h1>Go back <a href="/">Home</a></h1>
     <h1>Blog Page</h1>
 
     {% if guest %}
         <h4>Must be logged in to create blogs</h4>
     {% else %}
     <h2>Create Blog</h2>
-    <form method="POST">
+    <form method="POST" action="/blogs">
         <div>
             <label for="title">Title</label>
-            <input type="text" id="title" required>
+            <input type="text" name="title" required>
         </div>
         <div>
             <label for="description">Description</label>
-            <textarea id="description" required></textarea>
+            <textarea name="description" required></textarea>
         </div>
         <div>
             <label for="category">Category</label>
             <select name="category" id="category">
                 {% for category in categories %}
                     <option value="{{category}}">{{category}}</option>
-                    {{ blog }}
                 {% endfor %}
             </select>
         </div>
