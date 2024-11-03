@@ -79,26 +79,33 @@ from flask import Flask, render_template, request, session, redirect
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
-#CHECK IS A USER IS SIGNED IN
+
+#CHECK IF A USER IS SIGNED IN
 def sign_in_state():
     #note that session['user'] is a TUPLE in the shape of the table row: (id, normalized_username, username, password, salt, email)
     return 'user' in session.keys() and session['user'] != None
+
 #PASSWORD ENCRYPTION
 def password_hash(password, salt):
     if(salt == ""):
         salt = bcrypt.gensalt()
     return [bcrypt.hashpw(password.encode('utf-8'), salt), salt]
+
+
 @app.route("/", methods = ['GET', 'POST'])
 def home():
     return render_template("index.html", guest = not sign_in_state(), username = session['user'][1] if sign_in_state() else "")
+
 
 @app.route("/blog")
 def blog():
     return render_template("blogpost.html")
 
+
 @app.route("/edit")
 def edit():
     return render_template("editpost.html")
+
 
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
@@ -126,6 +133,7 @@ def login():
         return redirect('/')   
     else:
         return render_template("login.html", message = error)
+
 @app.route("/user")
 def user():
     return render_template("user.html")
@@ -157,7 +165,7 @@ def signup():
             conn.rollback()
         finally:
             if(len(error) == 0):
-                if any(c in " `~!@#$%^&*()=+[]\{\}\|,./<>?;\':\"" for c in request.form.get('username')):
+                if any(c in " `~!@#$%^&*()=+[]{}|,./<>?;':\"" for c in request.form.get('username')):
                     error.append("Username shouldn't contain spaces or special characters")
                 if(len(request.form.get('password')) < 10):
                     error.append("Password must be at least 10 characters long")
@@ -175,11 +183,13 @@ def signup():
     if(len(request.form) == 0):
         error = []
     return render_template("signup.html", message = error)
+
 @app.route("/logout")
 def logout():
     if(sign_in_state()):
         session.pop('user')
     return redirect('/')
+
 @app.route("/profile", methods = ['GET', 'POST'])
 def profile():
     if(not sign_in_state()):
@@ -235,7 +245,7 @@ def profile():
             print(e)
         finally:
             if(len(error) == 0):
-                if (type == 'username' and any(c in " `~!@#$%^&*()=+[]{\}\|,./<>?;\':\"" for c in request.form.get('username'))):
+                if (type == 'username' and any(c in " `~!@#$%^&*()=+[]{}|,./<>?;':\"" for c in request.form.get('username'))):
                     error.append("Username shouldn't contain spaces or special characters")
             if(len(error)!=0):
                 conn.rollback()
