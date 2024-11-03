@@ -96,12 +96,46 @@ def password_hash(password, salt):
 def home():
     return render_template("index.html", guest = not sign_in_state(), username = session['user'][1] if sign_in_state() else "")
 
+# Generates Blog HTML
+def gen_html(title, date, author, content):
+    post_html = f'''
+        <div>
+            <h2>{escape(title)}</h2>
+            <p>Created on {escape(date)}</p>
+            <p>Created by {escape(author)}</p>
+            <div>{escape(content)}</div>
+        </div>
+        '''
+    return post_html
 
-@app.route("/blog")
+#BLOG PAGE (CONTAINS ALL POSTS)
+@app.route("/blogs", methods=['GET', 'POST'])
 def blog():
-    return render_template("blogpost.html")
+    #Add a blog
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        if title and description:
+            conn = sqlite3.connect('xase.db')
+            # Here you would handle storing the title and description in the DB
+            # Example:
+            # cursor = conn.cursor()
+            # cursor.execute("INSERT INTO blogs (title, description) VALUES (?, ?)", (title, description))
+            # conn.commit()
+            conn.close()
+
+    #Show all blogs
+    conn = sqlite3.connect('xase.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM posts')
+    posts_list = c.fetchall()
+    conn.close()
+
+    return render_template("blogpost.html", guest = not sign_in_state(), posts = posts_list)
 
 
+
+#EDIT AND CREATE POSTS
 @app.route("/edit")
 def edit():
     return render_template("editpost.html")
