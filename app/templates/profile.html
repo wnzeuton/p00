@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>{{ username }}</h1>
+    <h2> {{ email }}</h2>
+    <h3><a href="/profile?update=true&type=username">Change username</a> | <a href="/profile?update=true&type=email">Change email</a> | <a href="/profile?update=true&type=password">Change password</a> | <a href="/logout">Log out</a> | <a href="/">Home</a></h3>
+    {% for error in message %}
+                <h5>{{ error }}</h5>
+            {% endfor %}
+    {% if update == true %}
+            <h4>Update user info | <a href="/profile">Cancel</a></h4>
+            
+            <form action="/profile?update=true&type={{ type }}" method="POST">
+                {% if type == "username" %}
+                    <input type="text" name="username" placeholder="new username" required><br>
+                {% elif type == "email" %}
+                    <input type ="email" name="email" placeholder="new email" required><br>
+                {% elif type == "password" %}
+                    <input type = "password" name="new_password" placeholder="new password" required><br>
+                    <input type = "password" name="confirm_password" placeholder="confirm new password" required><br>
+                {% endif %}
+                <input type="password" name = "password" placeholder="current password" required><br>
+                <input type="submit" name="update">
+            </form>
+    {% endif %}
+
+</body>
+</html>
