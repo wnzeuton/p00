@@ -1,6 +1,5 @@
-# p00
-## bxlobog by lobo
-### Install Guide
+# p00 - bxlobog by lobo
+## Install Guide
 Hey fellow Devos!
 
 - Step 0: Go tell your ducky you love them
@@ -11,7 +10,12 @@ Hey fellow Devos!
 
 - Step 3: Install the required packages by running ```pip3 install -r requirements.txt``` in the terminal. Consider activating a virtual environment and installing the libraries there.
 
-### Launch code
+## Launch code
 ```
 python3 __init__.py
+```
+
+If needed, set up the database by running the following commands in the terminal:
+```
+python3 setup_db.py
 ```
