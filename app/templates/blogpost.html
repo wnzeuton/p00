@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post</title>
+    <link href="{{url_for('static', filename='styles.css')}}" rel="stylesheet" type="text/css">
+    <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
 </head>
 <body>
     <h1>Go back <a href="/">Home</a></h1>
@@ -36,10 +38,12 @@
     </form>
     {% endif %}
 
-    <h4>View by <a href="category">categories</a></h4>
+    <h3>View by <a href="category">categories</a></h3>
 
     {% for blog in blogs %}
-        {{ blog[0] | safe }}
+        <div class="blog-post">
+            {{ blog[0] | safe }}
+        </div>
     {% endfor %}
 </body>
 </html>
