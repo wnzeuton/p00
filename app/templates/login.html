@@ -1,25 +1,25 @@
 <html>
-  <head>
+<head>
     <title> Login </title>
-      <link href="{{url_for('static', filename='styles.css')}}" rel="stylesheet" type="text/css">
-      <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
-  </head>
-  <body>
-    <h1>
-      Welcome back!
-    </h1>
-    <h4>{{ message }}</h4>
-    <h3>
-      Please sign in below.
-    </h3>
-    <form action="/login" method="POST">
-      <input type ="email" name="email" placeholder="email" required><br>
-      <input type="password" name = "password" placeholder="password" required><br>
-      <input type="submit" name="sub1">
-    </form>
-    <br>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
+</head>
+<body>
+<h1>
+    Welcome back!
+</h1>
+<h4>{{ message }}</h4>
+<h3>
+    Please sign in below.
+</h3>
+<form action="/login" method="POST">
+    <input type="email" name="email" placeholder="email" required><br>
+    <input type="password" name="password" placeholder="password" required><br>
+    <input type="submit" name="sub1">
+</form>
+<br>
 <h3>Don't have an account? Sign up <a href="/signup">here</a></h3>
 <h4> Or <a href="/">continue as guest</a></h4>
-  </body>
+</body>
 
 </html>

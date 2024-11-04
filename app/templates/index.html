@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link href="{{url_for('static', filename='styles.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" type="text/css">
     <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
 </head>
 <body>
-  <h1>xbxlobog</h1>
-  {% if guest %}
+<h1>xbxlobog</h1>
+{% if guest %}
     <h2>Viewing as guest - <a href="/login">log in</a> or <a href="/signup"> create an account</a></h2>
-  {% else %}
+{% else %}
     <h2>Signed in as {{ username }} - <a href="/logout">log out</a></h2>
     <h2><a href="/profile">User profile</a></h2>
-  {% endif %}
-  <h2>View <a href="blogs">Blog Page</a></h2>
+{% endif %}
+<h2>View <a href="blogs">Blog Page</a></h2>
 </body>
 </html>

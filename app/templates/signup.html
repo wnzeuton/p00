@@ -1,29 +1,29 @@
 <html>
-  <head>
+<head>
     <title> Signup </title>
-      <link href="{{url_for('static', filename='styles.css')}}" rel="stylesheet" type="text/css">
-      <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
-  </head>
-  <body>
-    <h1>
-      Create an account!
-    </h1>
-    {% for error in message %}
-      <h4>{{ error }}</h4>
-    {% endfor %}
-    <h3>
-      Please enter the information below.
-    </h3>
-    <form action="/signup" method="POST">
-      <input type="text" name="username" placeholder="username" required><br>
-      <input type ="email" name="email" placeholder="email" required><br>
-      <input type="password" name = "password" placeholder="password" required><br>
-      <input type="password" name = "confirm_password" placeholder="confirm password" required><br>
-      <input type="submit" name="signup">
-    </form>
-    <br>
-    <h3> Or <a href="/">continue as guest</a></h3>
-    <p>Already have an account? Log in <a href="/login">here</a></p>
-  </body>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
+</head>
+<body>
+<h1>
+    Create an account!
+</h1>
+{% for error in message %}
+    <h4>{{ error }}</h4>
+{% endfor %}
+<h3>
+    Please enter the information below.
+</h3>
+<form action="/signup" method="POST">
+    <input type="text" name="username" placeholder="username" required><br>
+    <input type="email" name="email" placeholder="email" required><br>
+    <input type="password" name="password" placeholder="password" required><br>
+    <input type="password" name="confirm_password" placeholder="confirm password" required><br>
+    <input type="submit" name="signup">
+</form>
+<br>
+<h3> Or <a href="/">continue as guest</a></h3>
+<p>Already have an account? Log in <a href="/login">here</a></p>
+</body>
 
 </html>

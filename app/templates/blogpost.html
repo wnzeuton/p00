@@ -4,46 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post</title>
-    <link href="{{url_for('static', filename='styles.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" type="text/css">
     <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Go back <a href="/">Home</a></h1>
-    <h1>Blog Page</h1>
-
+<h1>Blog Page</h1>
+<p><a href="/">Go back Home</a></p>
+<div>
     {% if guest %}
-        <h4>Must be logged in to create blogs</h4>
+        <h2>Must be logged in to create blogs</h2>
     {% else %}
-    <h2>Create Blog</h2>
-    <form method="POST" action="/blogs">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" name="title" required>
-        </div>
-        <div>
-            <label for="description">Description</label>
-            <textarea name="description" required></textarea>
-        </div>
-        <div>
-            <label for="category">Category</label>
-            <select name="category" id="category">
-                {% for category in categories %}
-                    <option value="{{category}}">{{category}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <button type="submit">Save</button>
-        </div>
-    </form>
+        <section>
+            <h2>Create Blog</h2>
+            <form method="POST" action="/blogs">
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div>
+                    <label for="description">Description</label>
+                    <textarea name="description" required></textarea>
+                </div>
+                <div>
+                    <label for="category">Category</label>
+                    <select name="category" id="category">
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+        </section>
     {% endif %}
 
-    <h3>View by <a href="category">categories</a></h3>
+    <section>
+        <h2>Browse Blogs</h2>
+        <p>View by <a href="category">categories</a></p>
 
-    {% for blog in blogs %}
-        <div class="blog-post">
-            {{ blog[0] | safe }}
-        </div>
-    {% endfor %}
+        {% for blog in blogs %}
+            <article class="blog-post">
+                {{ blog[0] | safe }}
+            </article>
+        {% endfor %}
+    </section>
+</div>
 </body>
 </html>
