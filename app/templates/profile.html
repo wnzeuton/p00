@@ -10,16 +10,16 @@
 <body>
 <h1>{{ username }}</h1>
 <h2> {{ email }}</h2>
-<h3><a href="/profile?update=true&type=username">Change username</a> | <a href="/profile?update=true&type=email">Change
-    email</a> | <a href="/profile?update=true&type=password">Change password</a> | <a href="/logout">Log out</a> | <a
-        href="/">Home</a></h3>
+<h3><a href="/settings?update=true&type=username">Change username</a> | <a href="/settings?update=true&type=email">Change
+    email</a> | <a href="/settings?update=true&type=password">Change password</a> | <a href="/logout">Log out</a> | <a
+        href="/user/{{ username }}">Back to profile</a></h3>
 {% for error in message %}
     <h5>{{ error }}</h5>
 {% endfor %}
 {% if update == true %}
     <h4>Update user info | <a href="/profile">Cancel</a></h4>
 
-    <form action="/profile?update=true&type={{ type }}" method="POST">
+    <form action="/settings?update=true&type={{ type }}" method="POST">
         {% if type == "username" %}
             <input type="text" name="username" placeholder="new username" required><br>
         {% elif type == "email" %}

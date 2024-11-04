@@ -252,8 +252,8 @@ def logout():
     return redirect('/')
 
 
-@app.route("/profile", methods=['GET', 'POST'])
-def profile():
+@app.route("/settings", methods=['GET', 'POST'])
+def settings():
     if not sign_in_state():
         return redirect('/')
     update = (request.args.get('update') == 'true')
