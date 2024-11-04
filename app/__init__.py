@@ -24,10 +24,10 @@ def home():
     return render_template("index.html", guest = not sign_in_state(), username = session['user'][1] if sign_in_state() else "")
 
 # Generates Blog HTML
-def gen_html(title, author, category, description):
+def gen_html(title, author, category, description, id):
     post_html = f'''
         <div>
-            <h2>{title}</h2>
+            <h2><a href="/blogs/{id}">{title}</a></h2>
             <p>Category: {category}</p>
             <p>Created by {author}</p>
             <div>{description}</div>
@@ -43,8 +43,6 @@ def blog(categories_list=None):
         description = request.form.get('description')
         category = request.form.get('category')
 
-        print(title, description, category)
-
         if title and description and category:
             conn = sqlite3.connect(DB_FILE)
             c = conn.cursor()
@@ -58,9 +56,11 @@ def blog(categories_list=None):
             if category_id:
                 # Insert the blog into the database
                 try:
+                    c.execute('SELECT MAX(id) FROM blogs')
+                    last_id = c.fetchone()[0]
                     c.execute(
                         "INSERT INTO blogs (title, description, category_id, author_id, html) VALUES (?, ?, ?, ?, ?)",
-                        (title, description, category_id[0], author_id, gen_html(title, session['user'][1], category, description))
+                        (title, description, category_id[0], author_id, gen_html(title, session['user'][1], category, description, last_id + 1))
                     )
                     conn.commit()
                 except sqlite3.Error as e:
@@ -80,8 +80,26 @@ def blog(categories_list=None):
 
     c.execute('SELECT html FROM blogs')
     blogs_list = c.fetchall()
+
     conn.close()
     return render_template("blogpost.html", guest = not sign_in_state(), blogs = blogs_list, categories = categories_list)
+
+@app.route("/blog/<int:blog_id>")
+def blog_detail(blog_id):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    # Fetch the specific blog post by ID
+    c.execute("SELECT title, description, html FROM blogs WHERE id = ?", (blog_id,))
+    blog = c.fetchone()
+    conn.close()
+
+    if blog:
+        title, description, html_content = blog
+        return render_template("blog_detail.html", title=title, description=description, content=html_content)
+    else:
+        # If the blog post is not found, show a 404 page
+        return render_template("404.html"), 404
+
 
 #EDIT AND CREATE POSTS
 @app.route("/edit")
