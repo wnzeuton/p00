@@ -1,3 +1,13 @@
+yinweiZ – 2024-11-03 23:40
+Reformatted code and improved HTML structure greatly
+yinweiZ – 2024-11-03 23:25
+Applied CSS styling + HTML refs
+yinweiZ – 2024-11-03 22:50
+Fixed blog content rendering issue and fixed xase.db location
+yinweiZ – 2024-11-03 22:30
+Reorganized xase.db placement, and fixed the two xases saved at diff places
+yinweiZ – 2024-11-03 22:00
+Split main Python file and project structure into two
 willN -- 2024-10-23 23:02
 Created Design Doc Overview, Components, Component Relationships, Database, and Task Assignments
 danielP -- 2024-10-23 23:07
