@@ -45,7 +45,7 @@ def blog(categories_list=None):
         print(title, description, category)
 
         if title and description and category:
-            conn = sqlite3.connect('xase.db')
+            conn = sqlite3.connect('../xase.db')
             c = conn.cursor()
 
             author_id = session['user'][0]
@@ -70,7 +70,7 @@ def blog(categories_list=None):
             else:
                 print("Category not found")
 
-    conn = sqlite3.connect('xase.db')
+    conn = sqlite3.connect('../xase.db')
     c = conn.cursor()
     c.execute('SELECT html FROM blogs')
     blogs_list = c.fetchall()
@@ -91,7 +91,7 @@ def login():
         return redirect('/')
     email = (request.form.get('email'))
     if email is not None:
-        conn = sqlite3.connect('xase.db')
+        conn = sqlite3.connect('../xase.db')
         c = conn.cursor()
         try:
             c.execute('SELECT * FROM users WHERE email = ?', (email.lower(),))
@@ -120,7 +120,7 @@ def signup():
     if request.form:
         pwd_salt = password_hash(request.form.get('password'), "")
         new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
-        conn = sqlite3.connect('xase.db')
+        conn = sqlite3.connect('../xase.db')
         c = conn.cursor()
         try:
             c.execute('INSERT INTO users (username, password, salt, email) VALUES (?, ?, ?, ?)', new_user)
