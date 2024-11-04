@@ -101,7 +101,7 @@ def blog_detail(blog_id):
 
     if blog_content:
         title, description, html_content = blog_content
-        return render_template("blog_detail.html", title=title, description=description, content=html_content)
+        return render_template("blogpost.html", title=title, description=description, content=html_content)
     else:
         # If the blog post is not found, show a 404 page
         return render_template("404.html"), 404
@@ -121,13 +121,11 @@ def login():
         return redirect('/')
     email = (request.form.get('email'))
     if email is not None:
-        conn = sqlite3.connect('xase.db')
+        conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         try:
             c.execute('SELECT * FROM users WHERE email = ?', (email.lower(),))
             authed_user = c.fetchone()
-        except sqlite3.Error as e:
-            e
         finally:
             c.close()
             conn.close()
@@ -156,7 +154,7 @@ def signup():
     if len(request.form) != 0:
         pwd_salt = password_hash(request.form.get('password'), "")
         new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
-        conn = sqlite3.connect('xase.db')
+        conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         try:
             c.execute('''
@@ -225,7 +223,7 @@ def profile():
         if len(error) != 0:
             return render_template("profile.html", update=update, type=req_type, username=session['user'][1],
                                    email=session['user'][4], message=error)
-        conn = sqlite3.connect('xase.db')
+        conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         try:
             if req_type != 'password':

@@ -13,9 +13,15 @@
     Please sign in below.
 </h3>
 <form action="/login" method="POST">
-    <input type="email" name="email" placeholder="email" required><br>
-    <input type="password" name="password" placeholder="password" required><br>
-    <input type="submit" name="sub1">
+    <label>
+        Email
+        <input type="email" name="email" placeholder="email" required>
+    </label><br>
+    <label>
+        Password
+        <input type="password" name="password" placeholder="password" required>
+    </label><br>
+    <input type="submit" name="sub1" value="Login">
 </form>
 <br>
 <h3>Don't have an account? Sign up <a href="/signup">here</a></h3>

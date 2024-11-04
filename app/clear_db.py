@@ -1,6 +1,9 @@
 import sqlite3
+import os
 
-def clear_database(db_name='xase.db'):
+DB_FILE = os.path.join(os.path.dirname(__file__), "xase.db")
+
+def clear_database(DB_FILE):
     conn = sqlite3.connect(db_name)
     c = conn.cursor()
     tables = ['users', 'categories', 'posts', 'comments', 'blogs']
