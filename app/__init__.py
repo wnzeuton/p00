@@ -5,6 +5,7 @@ import bcrypt
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
+DB_FILE = os.path.join(os.path.dirname(__file__), "xase.db")
 
 #CHECK IF A USER IS SIGNED IN
 def sign_in_state():
@@ -45,7 +46,7 @@ def blog(categories_list=None):
         print(title, description, category)
 
         if title and description and category:
-            conn = sqlite3.connect('xase.db')
+            conn = sqlite3.connect(DB_FILE)
             c = conn.cursor()
 
             author_id = session['user'][0]
@@ -70,8 +71,13 @@ def blog(categories_list=None):
             else:
                 print("Category not found")
 
-    conn = sqlite3.connect('xase.db')
+    conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
+
+    if categories_list is None:
+        c.execute("SELECT title FROM categories")
+        categories_list = [row[0] for row in c.fetchall()]
+
     c.execute('SELECT html FROM blogs')
     blogs_list = c.fetchall()
     conn.close()
@@ -91,7 +97,7 @@ def login():
         return redirect('/')
     email = (request.form.get('email'))
     if email is not None:
-        conn = sqlite3.connect('xase.db')
+        conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         try:
             c.execute('SELECT * FROM users WHERE email = ?', (email.lower(),))
@@ -120,7 +126,7 @@ def signup():
     if request.form:
         pwd_salt = password_hash(request.form.get('password'), "")
         new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
-        conn = sqlite3.connect('xase.db')
+        conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         try:
             c.execute('INSERT INTO users (username, password, salt, email) VALUES (?, ?, ?, ?)', new_user)

@@ -39,7 +39,7 @@
     <h4>View by <a href="category">categories</a></h4>
 
     {% for blog in blogs %}
-        {{ blog }}
+        {{ blog[0] | safe }}
     {% endfor %}
 </body>
 </html>
