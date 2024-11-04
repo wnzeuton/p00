@@ -130,7 +130,7 @@ def login():
         if(password_hash(request.form.get('password'), user[3])[0] != user[2]):
             return render_template("login.html", message = "Incorrect password")
         session['user'] = user
-        return redirect('/')  
+        return redirect('/')
     return render_template("login.html", message=error)
 
 @app.route("/user")
@@ -142,17 +142,25 @@ def category(categories_list=None):
     return render_template("category.html", categories = categories_list)
 
 @app.route("/signup", methods = ['GET', 'POST'])
-def signup():
+def signup():   
     error = []
-    if request.form:
+    if(len(request.form) != 0):
         pwd_salt = password_hash(request.form.get('password'), "")
         new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
-        conn = sqlite3.connect(DB_FILE)
+        conn = sqlite3.connect('xase.db')
         c = conn.cursor()
         try:
-            c.execute('INSERT INTO users (username, password, salt, email) VALUES (?, ?, ?, ?)', new_user)
+            c.execute('''
+            INSERT INTO users (username, password, salt, email) VALUES (?, ?, ?, ?)
+            ''', new_user)
         except sqlite3.IntegrityError:
             error.append("An account with that username or email already exists")
+            conn.rollback()
+        except sqlite3.Error as e:
+            error.append(f"ERROR: {e} - CONTACT DEVELOPERS FOR HELP")
+            conn.rollback()
+        except Exception as e:
+            error.append(str(e))
             conn.rollback()
         finally:
             if(len(error) == 0):
@@ -169,7 +177,12 @@ def signup():
                 session['user'] = (c.lastrowid, new_user[0], new_user[1], new_user[2], new_user[3])
             c.close()
             conn.close()
+    if(len(error) == 0 and len(request.form) != 0):
+        return redirect('/')
+    if(len(request.form) == 0):
+        error = []
     return render_template("signup.html", message = error)
+
 
 @app.route("/logout")
 def logout():
