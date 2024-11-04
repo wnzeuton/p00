@@ -13,6 +13,9 @@
     {% endif %}
 </h1>
 <p><a href="/">Go back Home</a></p>
+{% if owns_account %}
+<p><a href="/profile">User settings</a></p>
+{% endif %}
 {% if user != None %}
 <h2>Blogs</h2>
 {% for blog in blogs %}

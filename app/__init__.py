@@ -46,7 +46,7 @@ def gen_html(title, author, page_category, description, page_id):
         <div>
             <h2><a href="/blogs/{page_id}">{title}</a></h2>
             <p>Category: {page_category}</p>
-            <p>Created by {author}</p>
+            <p><a href = "/user/{author}">Created by {author}</a></p>
             <div>{description}</div>
         </div>
         '''
@@ -156,11 +156,14 @@ def user(username):
     user = getUserBy("username", username)
     blogs = None
     comments = None
+    owns_account = False
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     try:
         if user is not None:
             user_id = user[0] 
+            if sign_in_state() and username == session['user'][1]:
+               owns_account = True
             c.execute('''
                 SELECT * FROM blogs WHERE author_id = ?
             ''', (user_id,))
@@ -191,7 +194,7 @@ def user(username):
         
         c.close()
         conn.close()
-    return render_template("user.html", user = user, blogs = blogs, comments = comments)
+    return render_template("user.html", owns_account = owns_account, user = user, blogs = blogs, comments = comments)
 
 
 @app.route("/category")
@@ -312,7 +315,7 @@ def profile():
                 conn.rollback()
             else:
                 conn.commit()
-                c.execute("SELECT * FROM users WHERE id = ?", str(session['user'][0]))
+                c.execute("SELECT * FROM users WHERE id = ?", (session['user'][0],))
                 result = c.fetchone()
                 session['user'] = result
                 print("Successful!")
