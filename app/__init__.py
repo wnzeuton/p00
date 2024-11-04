@@ -13,7 +13,21 @@ def sign_in_state():
     # note that session['user'] is a TUPLE in the shape of the table row: (id, normalized_username, username, password, salt, email)
     return 'user' in session.keys() and session['user'] is not None
 
-
+def getUserBy(column, value):
+    conn = sqlite3.connect('xase.db')
+    c = conn.cursor()
+    try:
+        query = f"SELECT * FROM users WHERE {column} = ?"
+        c.execute(query, (value,))
+        user = c.fetchone()
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        user = None
+    finally:
+        c.close()
+        conn.close()
+    
+    return user
 # PASSWORD ENCRYPTION
 def password_hash(password, salt):
     if salt == "":
@@ -89,7 +103,6 @@ def blog(categories_list=None):
     conn.close()
     return render_template("blogpost.html", guest=not sign_in_state(), blogs=blogs_list, categories=categories_list)
 
-
 @app.route("/blog/<int:blog_id>")
 def blog_detail(blog_id):
     conn = sqlite3.connect(DB_FILE)
@@ -138,9 +151,47 @@ def login():
     return render_template("login.html", message=error)
 
 
-@app.route("/user")
-def user():
-    return render_template("user.html")
+@app.route("/user/<string:username>")
+def user(username):
+    user = getUserBy("username", username)
+    blogs = None
+    comments = None
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    try:
+        if user is not None:
+            user_id = user[0] 
+            c.execute('''
+                SELECT * FROM blogs WHERE author_id = ?
+            ''', (user_id,))
+            blogs = c.fetchall()
+            categories = []
+            for i in range(len(blogs)):
+                cat_id = blogs[i][3]
+                c.execute("SELECT title FROM categories WHERE id = ?", (cat_id,))
+                cat_title = c.fetchone()
+                blog = (blogs[i][0], blogs[i][1], blogs[i][2], cat_title[0], username, blogs[i][5])
+                blogs[i] = blog
+                print(blog)
+            c.execute('''
+                SELECT * FROM comments WHERE author_id = ?
+            ''', (user_id,))
+            comments = c.fetchall()
+        else:
+            user_id = None
+            blogs = []
+            comments = []
+    except sqlite3.Error as e:
+        conn.rollback()
+        print(e)
+    except Exception as e:
+        conn.rollback()
+        print(e)
+    finally:
+        
+        c.close()
+        conn.close()
+    return render_template("user.html", user = user, blogs = blogs, comments = comments)
 
 
 @app.route("/category")
