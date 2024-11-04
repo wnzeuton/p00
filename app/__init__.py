@@ -115,7 +115,7 @@ def login():
         return redirect('/')
     email = (request.form.get('email'))
     if email is not None:
-        conn = sqlite3.connect(DB_FILE)
+        conn = sqlite3.connect('xase.db')
         c = conn.cursor()
         try:
             c.execute('SELECT * FROM users WHERE email = ?', (email.lower(),))
@@ -125,9 +125,12 @@ def login():
         finally:
             c.close()
             conn.close()
-        if user and password_hash(request.form.get('password'), user[3])[0] == user[2]:
-            session['user'] = user
-            return redirect('/')
+        if(user == None):
+            return render_template("login.html", message = 'No such user with that email')
+        if(password_hash(request.form.get('password'), user[3])[0] != user[2]):
+            return render_template("login.html", message = "Incorrect password")
+        session['user'] = user
+        return redirect('/')  
     return render_template("login.html", message=error)
 
 @app.route("/user")
@@ -152,7 +155,16 @@ def signup():
             error.append("An account with that username or email already exists")
             conn.rollback()
         finally:
-            if not error:
+            if(len(error) == 0):
+                if any(c in " `~!@#$%^&*()=+[]\{\}\|,./<>?;\':\"" for c in request.form.get('username')):
+                    error.append("Username shouldn't contain spaces or special characters")
+                if(len(request.form.get('password')) < 10):
+                    error.append("Password must be at least 10 characters long")
+                if(request.form.get('password') != request.form.get('confirm_password')):
+                    error.append("Passwords do not match")
+            if(len(error)!=0):
+                conn.rollback()
+            else:
                 conn.commit()
                 session['user'] = (c.lastrowid, new_user[0], new_user[1], new_user[2], new_user[3])
             c.close()
@@ -167,9 +179,74 @@ def logout():
 
 @app.route("/profile", methods = ['GET', 'POST'])
 def profile():
-    if not sign_in_state():
+    if(not sign_in_state()):
         return redirect('/')
-    return render_template("profile.html", username=session['user'][1], email=session['user'][4])
+    update = (request.args.get('update') == 'true')
+    type = request.args.get('type')
+
+    if(update and request.form.get(type) != None):
+        formInfo = request.form.get(type)
+        formInfo2 = None
+        if(type == 'password'):
+            formInfo = request.form.get('new_password')
+            formInfo2 = request.form.get('confirm_password')
+        print("Updating " + type + " to " + formInfo)
+
+        error = []
+        if(password_hash(request.form.get('password'), session['user'][3])[0]) != session['user'][2]:
+            error.append("Incorrect password")
+        if(formInfo2 != None and formInfo2 != formInfo):
+            error.append("New passwords do not match")
+        if(formInfo2 != None and len(request.form.get('new_password')) < 10):
+            error.append("Password must be at least 10 characters long")
+        if(len(error) != 0):
+            return render_template("profile.html", update = update, type = type, username = session['user'][1], email = session['user'][4], message = error)
+        conn = sqlite3.connect('xase.db')
+        c = conn.cursor()
+        try:
+            if(type != 'password'):
+                c.execute(f'''
+                            UPDATE users
+                            SET {type} = ?
+                            WHERE id = ?
+                        ''', (formInfo, session['user'][0]))
+            else:
+                pwd = password_hash(formInfo, "")
+                c.execute(f'''
+                            UPDATE users
+                            SET {type} = ?, salt = ?
+                            WHERE id = ?
+                        ''', (pwd[0], pwd[1], session['user'][0]))
+            print("attempting break through")
+        except sqlite3.IntegrityError:
+            error.append(f"An account with that {type} already exists")
+            print("already exists")
+            conn.rollback()
+        except sqlite3.Error as e:
+            error.append(f"ERROR: {e} - CONTACT DEVELOPERS FOR HELP")
+            print(e)
+            conn.rollback()
+        except Exception as e:
+            error.append(str(e))
+            conn.rollback()
+            print(e)
+        finally:
+            if(len(error) == 0):
+                if (type == 'username' and any(c in " `~!@#$%^&*()=+[]{\}\|,./<>?;\':\"" for c in request.form.get('username'))):
+                    error.append("Username shouldn't contain spaces or special characters")
+            if(len(error)!=0):
+                conn.rollback()
+            else:
+                conn.commit()
+                c.execute("SELECT * FROM users WHERE id = ?", str(session['user'][0]))
+                result = c.fetchone()
+                session['user'] = result
+                print("Successful!")
+                return render_template('profile.html', update=False,type=None,username=session['user'][1], email=session['user'][4], message = [f"Updated {type}!"])
+            c.close()
+            conn.close()
+            return render_template("profile.html", update = update, type = type, username = session['user'][1], email = session['user'][4], message = error)
+    return render_template("profile.html", update = update, type = type, username = session['user'][1], email = session['user'][4])
 if __name__ == "__main__":
     app.debug = True
     app.run()
