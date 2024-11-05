@@ -58,6 +58,21 @@ def create_entry(blog_id):
     conn.close()
     print("inserted post")
     return redirect(f'/blogs/{blog_id}')
+@app.route("/blogs/<int:blog_id>/<int:entry_id>")
+def view_entry(blog_id, entry_id):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT title, date, author_id, content FROM posts WHERE id = ?", (entry_id,))
+    entry = c.fetchone()
+    if(entry):
+        entry_title, entry_date, entry_author, entry_content = entry
+    else:
+        return redirect(f'/blogs/{blog_id}')
+    entry_author = get_user("id", entry_author)[1]
+    c.execute("SELECT title FROM blogs WHERE id =?", (blog_id,))
+    blog_name = c.fetchone()[0]
+    conn.close()
+    return render_template('entry.html', entry_title = entry_title, entry_author = entry_author, entry_date = entry_date, blog_id = blog_id, blog_name = blog_name, entry_content = entry_content)
 # EDIT AND CREATE POSTS
 @app.route("/edit")
 def edit():
