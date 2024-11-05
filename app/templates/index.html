@@ -10,24 +10,34 @@
 <body>
 <h1>xbxlobog</h1>
 {% if guest %}
-    <h2>Viewing as guest - <a href="/login">log in</a> or <a href="/signup"> create an account</a></h2>
+    <div class="guest-view">
+        <h2>Viewing as guest</h2>
+        <div class="auth-opts">
+            <a href="/login" class="button"><h2>Log In</h2></a>
+            <a href="/signup" class="button"><h2>Sign Up</h2></a>
+        </div>
+    </div>
 {% else %}
-    <h2>Signed in as {{ username }} - <a href="/logout">log out</a></h2>
-    <h2><a href="/user/{{ username }}">View profile</a></h2>
+    <div class="guest-view">
+        <h2>Signed in as {{ username }}</h2>
+        <div class="auth-opts">
+            <a href="/user/{{ username }}" class="button"><h2>Profile</h2></a>
+            <a href="/logout" class="button"><h2>Log Out</h2></a>
+        </div>
+    </div>
 {% endif %}
-<h2>View <a href="blogs">Blog Page</a></h2>
 
-<section>
-    <div>
-        <h2>View All Blogs</h2>>
+<section class="hero-grid">
+    <a class="all-blogs" href="/blogs">
+        <div>
+            <h2>View All Blogs</h2>
+        </div>
+    </a>
+    <div class="categories">
+        <h2>View By Categories</h2>
     </div>
-
-    <div>
-        <h2>View By Categories</h2>>
-    </div>
-    
-    <div>
-        <h2>My Account</h2>>
+    <div class="my-account">
+        <h2>My Account</h2>
     </div>
 </section>
 
