@@ -1,7 +1,7 @@
-import bcrypt
 import sqlite3
 import os
-from .config import DB_FILE
+
+DB_FILE = os.path.join(os.path.dirname(__file__), "xase.db")
 
 db = sqlite3.connect(DB_FILE)
 c = db.cursor()

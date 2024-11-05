@@ -6,8 +6,10 @@ def gen_html(title, author, page_category, description, page_id):
     post_html = f'''
         <div>
             <h2><a href="/blogs/{page_id}">{title}</a></h2>
-            <p>Category: {page_category}</p>
-            <p><a href = "/user/{author}">Created by {author}</a></p>
+            <p><b>
+            Created by <a href = "/user/{author}">{author}</a>
+             in {page_category}
+            </b></p>
             <p>{description}</p>
         </div>
         '''
