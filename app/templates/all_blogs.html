@@ -15,11 +15,11 @@
 
 <div class="main-blog-view">
     <div class="left-section">
+    <h2>Create Blog</h2>
     {% if guest %}
-        <h2>Must be logged in to create blogs</h2>
+        <p>You must be logged in to create blogs</p>
     {% else %}
         <section>
-            <h2>Create Blog</h2>
             <form method="POST" action="/blogs">
                 <div>
                     <label for="title">Title</label>
@@ -44,7 +44,7 @@
         </section>
     {% endif %}
         <section>
-            <h2>Browse Blogs</h2>
+            <h2>Browse By</h2>
             <p>View by <a href="category">categories</a></p>
         </section>
     </div>
