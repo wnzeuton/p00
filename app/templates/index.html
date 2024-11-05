@@ -29,15 +29,16 @@
 
 <section class="hero-grid">
     <a class="all-blogs" href="/blogs">
-        <div>
-            <h2>View All Blogs</h2>
-        </div>
+            <img src="{{ url_for('static', filename='images/all.svg') }}" alt="All Blogs" style="width: 100px; margin-bottom: 20px">
+            <h2 style="margin: 10px">View All Blogs</h2>
     </a>
     <div class="categories">
-        <h2>View By Categories</h2>
+        <img src="{{ url_for('static', filename='images/filter.svg') }}" alt="Filter by Categories" style="width: 50px; margin-bottom: 20px">
+        <h2 style="margin: 5px">Filter by Categories</h2>
     </div>
     <div class="my-account">
-        <h2>My Account</h2>
+        <img src="{{ url_for('static', filename='images/user.svg') }}" alt="User Page" style="width: 50px; margin-bottom: 20px">
+        <h2 style="margin: 5px">My Account</h2>
     </div>
 </section>
 

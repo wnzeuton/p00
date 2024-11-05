@@ -8,6 +8,10 @@ body {
     box-sizing: border-box;
 }
 
+a {
+    color: royalblue;
+}
+
 h1 {
     color: rgb(230, 230, 230);
     line-height: 10px;
@@ -62,6 +66,7 @@ button {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover {
@@ -84,14 +89,25 @@ button:hover {
 }
 
 .all-blogs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     grid-column: 1;
     grid-row: 1 / span 2;
     background-color: #202020;
     border-radius: 10px;
     padding: 30px;
+    transition: background-color 0.3s;
+}
+
+.all-blogs:hover {
+    background-color: #353535;
 }
 
 .categories {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     grid-column: 2;
     grid-row: 1;
     background-color: #202020;
@@ -100,6 +116,9 @@ button:hover {
 }
 
 .my-account {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     grid-column: 2;
     grid-row: 2;
     background-color: #202020;
