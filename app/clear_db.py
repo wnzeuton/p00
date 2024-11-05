@@ -1,7 +1,5 @@
 import sqlite3
-import os
-
-DB_FILE = os.path.join(os.path.dirname(__file__), "xase.db")
+from .config import DB_FILE
 
 def clear_database():
     conn = sqlite3.connect(DB_FILE)
