@@ -14,7 +14,7 @@ def sign_in_state():
     return 'user' in session.keys() and session['user'] is not None
 
 def getUserBy(column, value):
-    conn = sqlite3.connect('xase.db')
+    conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     try:
         query = f"SELECT * FROM users WHERE {column} = ?"
