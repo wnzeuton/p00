@@ -10,6 +10,20 @@ body {
 
 a {
     color: royalblue;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+.button {
+    color: royalblue;
+    text-decoration: none;
+}
+
+.button:hover {
+    color: #0056b3;
 }
 
 h1 {

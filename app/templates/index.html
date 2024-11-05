@@ -13,16 +13,16 @@
     <div class="guest-view">
         <h2>Viewing as guest</h2>
         <div class="auth-opts">
-            <a href="/login" class="button"><h2>Log In</h2></a>
-            <a href="/signup" class="button"><h2>Sign Up</h2></a>
+            <a href="/login"><h2 class="button">Log In</h2></a>
+            <a href="/signup"><h2 class="button">Sign Up</h2></a>
         </div>
     </div>
 {% else %}
     <div class="guest-view">
         <h2>Signed in as {{ username }}</h2>
         <div class="auth-opts">
-            <a href="/user/{{ username }}" class="button"><h2>Profile</h2></a>
-            <a href="/logout" class="button"><h2>Log Out</h2></a>
+            <a href="/user/{{ username }}"><h2 class="button">Profile</h2></a>
+            <a href="/logout"><h2 class="button">Log Out</h2></a>
         </div>
     </div>
 {% endif %}
