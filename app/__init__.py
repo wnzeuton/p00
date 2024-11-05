@@ -13,7 +13,7 @@ def sign_in_state():
     # note that session['user'] is a TUPLE in the shape of the table row: (id, normalized_username, username, password, salt, email)
     return 'user' in session.keys() and session['user'] is not None
 
-def getUserBy(column, value):
+def get_user(column, value):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     try:
@@ -156,7 +156,7 @@ def login():
 
 @app.route("/user/<string:username>")
 def user(username):
-    user = getUserBy("username", username)
+    user = get_user("username", username)
     blogs = None
     comments = None
     owns_account = False
