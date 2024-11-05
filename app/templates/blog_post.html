@@ -11,6 +11,7 @@
 
     <header>
         <h1>{{ title }}</h1>
+        <h2>By {{ author }}</h2>
         <a href="{{ url_for('blog') }}">Back to All Blogs</a>
     </header>
 
@@ -18,7 +19,15 @@
         <div class="blog-description">
             <p>{{ description }}</p>
         </div>
-        
+        <div class = "blog-entries">
+            <h2>Entries</h2>
+            {% if is_owner %}
+                <p><a href = "{{ url_for('create_entry', blog_id=blog_id)}}">Create new entry</a></p>
+            {% endif %}
+            {% for entry in entries %}
+                <h3>{{entry[1]}} - {{entry[2]}}</h3>
+            {% endfor %}
+        </div>
     </section>
 
 </body>

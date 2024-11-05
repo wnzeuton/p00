@@ -24,16 +24,40 @@ def blog_detail(blog_id):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     # Fetch the specific blog post by ID
-    c.execute("SELECT title, description, html FROM blogs WHERE id = ?", (blog_id,))
+    c.execute("SELECT title, description, html, author_id FROM blogs WHERE id = ?", (blog_id,))
     blog_content = c.fetchone()
+    c.execute("SELECT username FROM users WHERE id = ?", (blog_content[3],))
+    author_username = c.fetchone()
+    c.execute("SELECT * FROM posts WHERE blog_id=?",(blog_id,))
+    entries = c.fetchall()
     conn.close()
+    is_owner = (sign_in_state(session) and author_username[0] == session['user'][1])
 
     if blog_content:
-        title, description, blog_description = blog_content
-        return render_template("blog_post.html", title=title, description=description, content=blog_description)
+        title, description, blog_description, author_id = blog_content
+        return render_template("blog_post.html", is_owner = is_owner, title=title, description=description, content=blog_description, author = author_username[0], blog_id=blog_id, entries = entries)
     else:
         return render_template("404.html"), 404
-
+@app.route("/blogs/<int:blog_id>/create", methods=['GET', 'POST'])
+def create_entry(blog_id):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT author_id FROM blogs WHERE id = ?", (blog_id,))
+    author_id = c.fetchone()[0]
+    conn.close()
+    if(not sign_in_state(session) or author_id != session['user'][0]):
+        return redirect('/')
+    if(not request.form):
+        return render_template("create_entry.html", blog_id = blog_id)
+    entry_title = request.form.get('title')
+    entry_content = request.form.get('content')
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("INSERT INTO posts (title, author_id, blog_id, content) VALUES (?, ?, ?, ?)", (entry_title, author_id, blog_id, entry_content))
+    conn.commit()
+    conn.close()
+    print("inserted post")
+    return redirect(f'/blogs/{blog_id}')
 # EDIT AND CREATE POSTS
 @app.route("/edit")
 def edit():
