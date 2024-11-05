@@ -207,3 +207,24 @@ def settings():
                 c.close()
                 conn.close()
     return render_template("settings.html", username=session['user'][1], email=session['user'][4], update=update, type=req_type, message=error)
+
+@app.route("/category", methods=['GET', 'POST'])
+def category():
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+
+    c.execute("SELECT title FROM categories")
+    categories = [row[0] for row in c.fetchall()]
+    selected_category = request.form.get("category") or "Art/Music"
+    print(selected_category)
+    blogs = []
+    c.execute('''
+        SELECT blog.id, blog.title, blog.description, user.username
+        FROM blogs blog
+        JOIN categories c ON blog.category_id = c.id
+        JOIN users user ON blog.author_id = user.id
+        WHERE c.title = ?
+    ''', (selected_category,))
+    blogs = c.fetchall()
+    conn.close()
+    return render_template("category.html", categories=categories, blogs=blogs, selected_category=selected_category)
