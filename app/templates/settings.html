@@ -14,22 +14,32 @@
     email</a> | <a href="/settings?update=true&type=password">Change password</a> | <a href="/logout">Log out</a> | <a
         href="/user/{{ username }}">Back to profile</a></h3>
 {% for error in message %}
-    <h5>{{ error }}</h5>
+    <p>{{ error }}</p>
 {% endfor %}
 {% if update == true %}
     <p>Update user info | <a href="/settings">Cancel</a></p>
 
     <form action="/settings?update=true&type={{ type }}" method="POST">
         {% if type == "username" %}
-            <input type="text" name="username" placeholder="new username" required><br>
+            <label>
+                <input type="text" name="username" placeholder="new username" required>
+            </label><br>
         {% elif type == "email" %}
-            <input type="email" name="email" placeholder="new email" required><br>
+            <label>
+                <input type="email" name="email" placeholder="new email" required>
+            </label><br>
         {% elif type == "password" %}
-            <input type="password" name="new_password" placeholder="new password" required><br>
-            <input type="password" name="confirm_password" placeholder="confirm new password" required><br>
+            <label>
+                <input type="password" name="new_password" placeholder="new password" required>
+            </label><br>
+            <label>
+                <input type="password" name="confirm_password" placeholder="confirm new password" required>
+            </label><br>
         {% endif %}
-        <input type="password" name="password" placeholder="current password" required><br>
-        <input type="submit" name="update">
+        <label>
+            <input type="password" name="password" placeholder="current password" required>
+        </label><br>
+        <button type="submit" name="sub1">Confirm</button>
     </form>
 {% endif %}
 </body>

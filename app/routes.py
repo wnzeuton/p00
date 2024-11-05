@@ -66,21 +66,28 @@ def logout():
 def signup():
     error = []
     if request.method == 'POST':
-        pwd_salt = password_hash(request.form.get('password'), "")
-        new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        try:
-            c.execute("INSERT INTO users (username, password, salt, email) VALUES (?, ?, ?, ?)", new_user)
-            conn.commit()
-            session['user'] = (c.lastrowid, new_user[0], new_user[1], new_user[2], new_user[3])
-            return redirect('/')
-        except sqlite3.IntegrityError:
-            error.append("An account with that username or email already exists")
-            conn.rollback()
-        finally:
-            c.close()
-            conn.close()
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        if len(password) < 10:
+            error.append("Password must be at least 10 characters long")
+        if password != confirm_password:
+            error.append("Passwords do not match")
+        if not error:
+            pwd_salt = password_hash(password, "")
+            new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            try:
+                c.execute("INSERT INTO users (username, password, salt, email) VALUES (?, ?, ?, ?)", new_user)
+                conn.commit()
+                session['user'] = (c.lastrowid, new_user[0], new_user[1], new_user[2], new_user[3])
+                return redirect('/')
+            except sqlite3.IntegrityError:
+                error.append("An account with that username or email already exists")
+                conn.rollback()
+            finally:
+                c.close()
+                conn.close()
     return render_template("signup.html", message=error)
 
 @app.route("/user/<string:username>")
@@ -95,4 +102,36 @@ def user_profile(username):
 def settings():
     if not sign_in_state(session):
         return redirect('/')
-    return render_template("settings.html", username=session['user'][1], email=session['user'][4])
+
+    update = request.args.get('update') == 'true'
+    req_type = request.args.get('type')
+    error = []
+
+    if update and request.method == 'POST' and req_type == 'password':
+        current_password = request.form.get('password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        user = session['user']
+        if password_hash(current_password, user[3])[0] != user[2]:
+            error.append("Incorrect current password")
+        if len(new_password) < 10:
+            error.append("New password must be at least 10 characters long")
+        if new_password != confirm_password:
+            error.append("New passwords do not match")
+
+        if not error:
+            pwd_salt = password_hash(new_password, "")
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            try:
+                c.execute("UPDATE users SET password = ?, salt = ? WHERE id = ?", (pwd_salt[0], pwd_salt[1], user[0]))
+                conn.commit()
+                session['user'] = (user[0], user[1], pwd_salt[0], pwd_salt[1], user[4])
+                return redirect('/settings')
+            except sqlite3.Error as e:
+                error.append("An error occurred while updating the password")
+                conn.rollback()
+            finally:
+                c.close()
+                conn.close()
+    return render_template("settings.html", username=session['user'][1], email=session['user'][4], update=update, type=req_type, message=error)
