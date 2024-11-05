@@ -20,7 +20,7 @@
 <h2>Blogs</h2>
 {% if blogs %}
     {% for blog in blogs %}
-        <h3>{{ blog[1] }} - {{ blog[3] }}</h3>
+        <h3><a href = "/blogs/{{blog[0]}}">{{blog[1]}}</a> - {{ blog[3] }}</h3>
         <p>{{ blog[2] }}</p>
     {% endfor %}
 {% else %}

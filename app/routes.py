@@ -93,10 +93,43 @@ def signup():
 @app.route("/user/<string:username>")
 def user_profile(username):
     user = get_user("username", username)
-    blogs, comments, owns_account = None, None, False
-    if user:
-        owns_account = sign_in_state(session) and username == session['user'][1]
-    return render_template("user.html", owns_account=owns_account, user=user, blogs=blogs, comments=comments)
+    blogs = None
+    comments = None
+    owns_account = False
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    try:
+        if user is not None:
+            user_id = user[0] 
+            if sign_in_state(session) and username == session['user'][1]:
+               owns_account = True
+            c.execute('''
+                SELECT * FROM blogs WHERE author_id = ?
+            ''', (user_id,))
+            blogs = c.fetchall()
+            categories = []
+            for i in range(len(blogs)):
+                cat_id = blogs[i][3]
+                c.execute("SELECT title FROM categories WHERE id = ?", (cat_id,))
+                cat_title = c.fetchone()
+                blog = (blogs[i][0], blogs[i][1], blogs[i][2], cat_title[0], username, blogs[i][5])
+                blogs[i] = blog
+                
+            c.execute('''
+                SELECT * FROM comments WHERE author_id = ?
+            ''', (user_id,))
+            comments = c.fetchall()
+
+    except sqlite3.Error as e:
+        conn.rollback()
+        print(e)
+    except Exception as e:
+        conn.rollback()
+        print(e)
+    finally:
+        c.close()
+        conn.close()
+    return render_template("user.html", owns_account = owns_account, user = user, blogs = blogs, comments = comments)
 
 @app.route("/settings", methods=['GET', 'POST'])
 def settings():
