@@ -17,7 +17,7 @@
     <h5>{{ error }}</h5>
 {% endfor %}
 {% if update == true %}
-    <h4>Update user info | <a href="/settings">Cancel</a></h4>
+    <p>Update user info | <a href="/settings">Cancel</a></p>
 
     <form action="/settings?update=true&type={{ type }}" method="POST">
         {% if type == "username" %}

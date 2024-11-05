@@ -26,7 +26,7 @@ def getUserBy(column, value):
     finally:
         c.close()
         conn.close()
-    
+
     return user
 # PASSWORD ENCRYPTION
 def password_hash(password, salt):
@@ -47,7 +47,7 @@ def gen_html(title, author, page_category, description, page_id):
             <h2><a href="/blogs/{page_id}">{title}</a></h2>
             <p>Category: {page_category}</p>
             <p><a href = "/user/{author}">Created by {author}</a></p>
-            <div>{description}</div>
+            <p>{description}</p>
         </div>
         '''
     return post_html
@@ -76,6 +76,8 @@ def blog(categories_list=None):
                 try:
                     c.execute('SELECT MAX(id) FROM blogs')
                     last_id = c.fetchone()[0]
+                    if last_id is None:
+                        last_id = 0
                     c.execute(
                         "INSERT INTO blogs (title, description, category_id, author_id, html) VALUES (?, ?, ?, ?, ?)",
                         (title, description, category_id[0], author_id,
@@ -101,9 +103,10 @@ def blog(categories_list=None):
     blogs_list = c.fetchall()
 
     conn.close()
-    return render_template("blogpost.html", guest=not sign_in_state(), blogs=blogs_list, categories=categories_list)
+    return render_template("all_blogs.html", guest=not sign_in_state(), blogs=blogs_list, categories=categories_list)
 
-@app.route("/blog/<int:blog_id>")
+
+@app.route("/blogs/<int:blog_id>")
 def blog_detail(blog_id):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
@@ -113,8 +116,8 @@ def blog_detail(blog_id):
     conn.close()
 
     if blog_content:
-        title, description, html_content = blog_content
-        return render_template("blogpost.html", title=title, description=description, content=html_content)
+        title, description, blog_description = blog_content
+        return render_template("blog_post.html", title=title, description=description, content=blog_description)
     else:
         # If the blog post is not found, show a 404 page
         return render_template("404.html"), 404
@@ -161,7 +164,7 @@ def user(username):
     c = conn.cursor()
     try:
         if user is not None:
-            user_id = user[0] 
+            user_id = user[0]
             if sign_in_state() and username == session['user'][1]:
                owns_account = True
             c.execute('''
@@ -191,7 +194,7 @@ def user(username):
         conn.rollback()
         print(e)
     finally:
-        
+
         c.close()
         conn.close()
     return render_template("user.html", owns_account = owns_account, user = user, blogs = blogs, comments = comments)

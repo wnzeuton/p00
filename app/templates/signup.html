@@ -9,17 +9,29 @@
     Create an account!
 </h1>
 {% for error in message %}
-    <h4>{{ error }}</h4>
+    <p>{{ error }}</p>
 {% endfor %}
 <h3>
     Please enter the information below.
 </h3>
 <form action="/signup" method="POST">
-    <input type="text" name="username" placeholder="username" required><br>
-    <input type="email" name="email" placeholder="email" required><br>
-    <input type="password" name="password" placeholder="password" required><br>
-    <input type="password" name="confirm_password" placeholder="confirm password" required><br>
-    <input type="submit" name="signup">
+    <label>
+        Username
+        <input type="text" name="username" placeholder="My Name" required>
+    </label><br>
+    <label>
+        Email
+        <input type="email" name="email" placeholder="address@example.com" required>
+    </label><br>
+    <label>
+        Password
+        <input type="password" name="password" required>
+    </label><br>
+    <label>
+        Confirm Password
+        <input type="password" name="confirm_password" required>
+    </label><br>
+    <button type="submit" name="sub1">Sign Up</button>
 </form>
 <br>
 <h3> Or <a href="/">continue as guest</a></h3>
