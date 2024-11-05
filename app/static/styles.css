@@ -64,6 +64,7 @@ input {
     padding: 10px;
     color: rgb(195, 195, 195);
     margin-top: 10px;
+    margin-bottom: 10px;
     background-color: #1b1b1b;
     border: 1px solid #4e4e4e;
     box-shadow: inset 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
