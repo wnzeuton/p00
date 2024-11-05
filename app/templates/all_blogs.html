@@ -8,9 +8,13 @@
     <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
 </head>
 <body>
+<div>
 <h1>All Blogs</h1>
 <p><a href="/">Go back Home</a></p>
-<div>
+</div>
+
+<div class="main-blog-view">
+    <div class="left-section">
     {% if guest %}
         <h2>Must be logged in to create blogs</h2>
     {% else %}
@@ -39,17 +43,19 @@
             </form>
         </section>
     {% endif %}
-
-    <section>
-        <h2>Browse Blogs</h2>
-        <p>View by <a href="category">categories</a></p>
-
+        <section>
+            <h2>Browse Blogs</h2>
+            <p>View by <a href="category">categories</a></p>
+        </section>
+    </div>
+    <div class="right-section">
+        <h2>All Blogs</h2>
         {% for blog in blogs %}
             <article class="blog-post">
                 {{ blog[0] | safe }}
             </article>
         {% endfor %}
-    </section>
+    </div>
 </div>
 </body>
 </html>

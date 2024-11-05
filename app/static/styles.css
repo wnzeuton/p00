@@ -118,3 +118,20 @@ button:hover {
     display: flex;
     gap: 20px;
 }
+
+.main-blog-view {
+    display: flex;
+    gap: 20px;
+}
+
+.left-section {
+    flex: 1;
+}
+
+.right-section {
+    flex: 2;
+}
+
+.blog-post {
+    margin-bottom: 20px;
+}
