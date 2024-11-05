@@ -1,15 +1,3 @@
-timN - 2024-11-04 04:25
-Worked on README.md to add project description
-yinweiZ – 2024-11-03 23:40
-Reformatted code and improved HTML structure greatly
-yinweiZ – 2024-11-03 23:25
-Applied CSS styling + HTML refs
-yinweiZ – 2024-11-03 22:50
-Fixed blog content rendering issue and fixed xase.db location
-yinweiZ – 2024-11-03 22:30
-Reorganized xase.db placement, and fixed the two xases saved at diff places
-yinweiZ – 2024-11-03 22:00
-Split main Python file and project structure into two
 willN -- 2024-10-23 23:02
 Created Design Doc Overview, Components, Component Relationships, Database, and Task Assignments
 danielP -- 2024-10-23 23:07
@@ -24,7 +12,6 @@ willN -- 2024-10-28 11:22
 Fixed design doc mistake
 yinweiZ -- 2024-10-29 11:22
 Added template skeletons for the site. Added IDEA files.
-Fixed design doc mistake
 timN -- 2024-10-29 11:35
 added sections on README
 willN -- 2024-10-29 11:40
@@ -55,7 +42,6 @@ Clarified Key Names: Certain key names have been updated for better clarity.
 Expanded User Table: The users table now contains numerous additional keys, which are detailed below.
 User Authentication Module: Users can now create accounts, allowing their details to be added to the users database, including a hashed password and its corresponding salt for encryption.
 Login Functionality: A login feature has been implemented and is functioning as expected
-
 UAM is effectively completed. requirements.txt may need to be updated. DD needs to be updated.
 willN -- 2024-11-02 23:06
 Database:
@@ -68,3 +54,21 @@ Database:
 	 -Small update to blog db to include html
 Blog Module
 	 -Allowed for creating blog pages
+yinweiZ – 2024-11-03 22:00
+Split main Python file and project structure into two
+yinweiZ – 2024-11-03 22:30
+Reorganized xase.db placement, and fixed the two xases saved at diff places
+yinweiZ – 2024-11-03 22:50
+Fixed blog content rendering issue and fixed xase.db location
+yinweiZ – 2024-11-03 23:25
+Applied CSS styling + HTML refs
+yinweiZ – 2024-11-03 23:40
+Reformatted code and improved HTML structure greatly
+timN - 2024-11-04 04:25
+Worked on README.md to add project description
+yinweiZ - 2024-11-04 11:47
+Improved naming conventions, cleaned up code, and fixed xase references that created two xase.db files again
+yinweiZ - 2024-11-04 23:12
+Update LAF, individual blog page, xase.db issue again, get user name, refactor into smaller files
+yinweiZ - 2024-11-05 12:29
+Update styling en masse, sticky scrolling, added category page, fixed UX flows, and profile button
