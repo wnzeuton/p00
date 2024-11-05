@@ -5,13 +5,10 @@
     <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
 </head>
 <body>
-<h1>
+<section class="centered-login">
+<h1 style="text-align: center;margin-bottom: 50px;">
     Welcome back!
 </h1>
-<p>{{ message }}</p>
-<h3>
-    Please sign in below.
-</h3>
 <form action="/login" method="POST">
     <label>
         Email
@@ -22,10 +19,12 @@
         <input type="password" name="password" placeholder="password" required>
     </label><br>
     <button type="submit" name="sub1">Login</button>
+    <p style="text-align: center">{{ message }}</p>
 </form>
 <br>
-<h3>Don't have an account? Sign up <a href="/signup">here</a></h3>
-<p> Or <a href="/">continue as guest</a></p>
+<h3 style="text-align: center">Don't have an account? Sign up <a href="/signup">here</a></h3>
+<p style="text-align: center"> Or <a href="/">continue as guest</a></p>
+</section>
 </body>
 
 </html>

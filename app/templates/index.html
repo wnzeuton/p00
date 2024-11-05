@@ -11,7 +11,7 @@
 <h1>xbxlobog</h1>
 {% if guest %}
     <div class="guest-view">
-        <h2>Viewing as guest</h2>
+        <h2>Welcome to the blog!</h2>
         <div class="auth-opts">
             <a href="/login"><h2 class="button">Log In</h2></a>
             <a href="/signup"><h2 class="button">Sign Up</h2></a>
@@ -19,7 +19,7 @@
     </div>
 {% else %}
     <div class="guest-view">
-        <h2>Signed in as {{ username }}</h2>
+        <h2>Welcome back, {{ username }}!</h2>
         <div class="auth-opts">
             <a href="/user/{{ username }}"><h2 class="button">Profile</h2></a>
             <a href="/logout"><h2 class="button">Log Out</h2></a>
