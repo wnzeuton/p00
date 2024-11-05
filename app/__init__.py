@@ -275,7 +275,7 @@ def settings():
         if form_info2 is not None and len(request.form.get('new_password')) < 10:
             error.append("Password must be at least 10 characters long")
         if len(error) != 0:
-            return render_template("profile.html", update=update, type=req_type, username=session['user'][1],
+            return render_template("settings.html", update=update, type=req_type, username=session['user'][1],
                                    email=session['user'][4], message=error)
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
@@ -319,13 +319,13 @@ def settings():
                 result = c.fetchone()
                 session['user'] = result
                 print("Successful!")
-                return render_template('profile.html', update=False, type=None, username=session['user'][1],
+                return render_template('settings.html', update=False, type=None, username=session['user'][1],
                                        email=session['user'][4], message=[f"Updated {req_type}!"])
             c.close()
             conn.close()
-            return render_template("profile.html", update=update, type=req_type, username=session['user'][1],
+            return render_template("settings.html", update=update, type=req_type, username=session['user'][1],
                                    email=session['user'][4], message=error)
-    return render_template("profile.html", update=update, type=req_type, username=session['user'][1],
+    return render_template("settings.html", update=update, type=req_type, username=session['user'][1],
                            email=session['user'][4])
 
 
