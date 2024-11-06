@@ -45,9 +45,9 @@ def create_entry(blog_id):
     c.execute("SELECT author_id FROM blogs WHERE id = ?", (blog_id,))
     author_id = c.fetchone()[0]
     conn.close()
-    if(not sign_in_state(session) or author_id != session['user'][0]):
+    if not sign_in_state(session) or author_id != session['user'][0]:
         return redirect('/')
-    if(not request.form):
+    if not request.form:
         return render_template("create_entry.html", blog_id = blog_id)
     entry_title = request.form.get('title')
     entry_content = request.form.get('content')
@@ -64,7 +64,7 @@ def view_entry(blog_id, entry_id):
     c = conn.cursor()
     c.execute("SELECT title, date, author_id, content FROM posts WHERE id = ?", (entry_id,))
     entry = c.fetchone()
-    if(entry):
+    if entry:
         entry_title, entry_date, entry_author, entry_content = entry
     else:
         return redirect(f'/blogs/{blog_id}')
@@ -149,13 +149,12 @@ def user_profile(username):
                 SELECT * FROM blogs WHERE author_id = ?
             ''', (user_id,))
             blogs = c.fetchall()
-            categories = []
             for i in range(len(blogs)):
                 cat_id = blogs[i][3]
                 c.execute("SELECT title FROM categories WHERE id = ?", (cat_id,))
                 cat_title = c.fetchone()
-                blog = (blogs[i][0], blogs[i][1], blogs[i][2], cat_title[0], username, blogs[i][5])
-                blogs[i] = blog
+                usr_blog = (blogs[i][0], blogs[i][1], blogs[i][2], cat_title[0], username, blogs[i][5])
+                blogs[i] = usr_blog
                 
             c.execute('''
                 SELECT * FROM comments WHERE author_id = ?
@@ -180,10 +179,8 @@ def settings():
 
     update = request.args.get('update') == 'true'
     req_type = request.args.get('type')
-    error = []
     valid_types = ['username', 'email', 'password']
     if req_type not in valid_types and request.args:
-        request.args = None
         return redirect('/settings')
     if update and request.form.get(req_type) is not None:
         form_info = request.form.get(req_type)
@@ -264,7 +261,6 @@ def category():
     categories = [row[0] for row in c.fetchall()]
     selected_category = request.form.get("category") or "Art/Music"
     print(selected_category)
-    blogs = []
     c.execute('''
         SELECT blog.id, blog.title, blog.description, user.username
         FROM blogs blog
