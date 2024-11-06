@@ -12,7 +12,7 @@
         {{ user[1] }}
     {% endif %}
 </h1>
-<p><a href="/">Go back Home</a></p>
+<p><a href="{{ request.referrer or url_for('home')}}">Go back</a></p>
 {% if owns_account %}
 <p><a href="/settings?username={{user[1]}}">User settings</a></p>
 {% endif %}

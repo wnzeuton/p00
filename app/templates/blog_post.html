@@ -10,7 +10,7 @@
 <body>
 
     <header>
-        <a href="{{ url_for('blog') }}">Back to All Blogs</a>
+        <p><a href="{{ request.referrer or url_for('blog')}}">Go back</a></p>
         <h1>{{ title }}</h1>
         <h2>By {{ author }}</h2>
         
