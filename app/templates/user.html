@@ -5,6 +5,7 @@
     <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
 </head>
 <body>
+<p><a href="{{ url_for('home')}}">Home</a></p>
 <h1>
     {% if user == None %}
         USER DOES NOT EXIST
@@ -12,7 +13,6 @@
         {{ user[1] }}
     {% endif %}
 </h1>
-<p><a href="{{ url_for('home')}}">Home</a> | <a href="{{ url_for('logout') }}">Log out</a></p>
 {% if owns_account %}
 <p><a href="/settings?username={{user[1]}}">User settings</a></p>
 {% endif %}
