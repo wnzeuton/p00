@@ -26,7 +26,7 @@
             <h2>Entries</h2>
             {% if is_owner %}
                 <a href = "{{ url_for('create_entry', blog_id=blog_id)}}" style="display: flex; justify-content: center; align-content: center; flex-wrap: wrap">
-                    <img src="{{ url_for('static', filename='images/add.svg') }}" alt="Add Entry" style="width: 30px; margin-right: 10px">
+                    <img src="{{ url_for('static', filename='images/icons/add.svg') }}" alt="Add Entry" style="width: 30px; margin-right: 10px">
                     <h2 style="color: #2773E4">Add</h2>
                 </a>
             {% endif %}

@@ -29,21 +29,21 @@
 
 <section class="hero-grid">
     <a class="all-blogs" href="/blogs">
-            <img src="{{ url_for('static', filename='images/all.svg') }}" alt="All Blogs" style="width: 100px; margin-bottom: 20px">
+            <img src="{{ url_for('static', filename='images/icons/all.svg') }}" alt="All Blogs" style="width: 100px; margin-bottom: 20px">
             <h2 style="margin: 10px; color: #dadada">View & Create Blogs</h2>
     </a>
     <a class="categories" href="/category">
-        <img src="{{ url_for('static', filename='images/filter.svg') }}" alt="Filter by Categories" style="width: 50px; margin-bottom: 20px">
+        <img src="{{ url_for('static', filename='images/icons/filter.svg') }}" alt="Filter by Categories" style="width: 50px; margin-bottom: 20px">
         <h2 style="margin: 5px">Filter by Categories</h2>
     </a>
     {% if guest %}
         <a class="my-account" href="/login">
-            <img src="{{ url_for('static', filename='images/user.svg') }}" alt="Log In" style="width: 50px; margin-bottom: 20px">
+            <img src="{{ url_for('static', filename='images/icons/user.svg') }}" alt="Log In" style="width: 50px; margin-bottom: 20px">
             <h2 style="margin: 5px">Log In</h2>
         </a>
     {% else %}
         <a class="my-account" href="/user/{{ username }}">
-            <img src="{{ url_for('static', filename='images/user.svg') }}" alt="My Account" style="width: 50px; margin-bottom: 20px">
+            <img src="{{ url_for('static', filename='images/icons/user.svg') }}" alt="My Account" style="width: 50px; margin-bottom: 20px">
             <h2 style="margin: 5px">My Account</h2>
         </a>
     {% endif %}

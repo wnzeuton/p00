@@ -1,5 +1,5 @@
 import sqlite3
-from .config import DB_FILE
+from app.config import DB_FILE
 
 def clear_database():
     conn = sqlite3.connect(DB_FILE)
