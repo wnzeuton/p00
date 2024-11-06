@@ -72,3 +72,7 @@ yinweiZ - 2024-11-04 23:12
 Update LAF, individual blog page, xase.db issue again, get user name, refactor into smaller files
 yinweiZ - 2024-11-05 12:29
 Update styling en masse, sticky scrolling, added category page, fixed UX flows, and profile button
+yinweiZ - 2024-11-05 17:42
+HTML tags, Look and feel improvements, profile buttons, more flexboxes, category page update
+yinweiZ - 2024-11-05 22:00
+Styling fixes, nav flow, new logo, empty blog link to create new, link fixes, new buttons, icons
