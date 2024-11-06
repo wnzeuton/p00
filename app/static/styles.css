@@ -21,21 +21,21 @@ body {
     background-color: #2b2b2b;
 }
 a {
-    color: royalblue;
+    color: #567dfb;
     text-decoration: none;
 }
 
 a:hover {
-    color: #0056b3;
+    color: #0076f4;
 }
 
 .button {
-    color: royalblue;
+    color: #567dfb;
     text-decoration: none;
 }
 
 .button:hover {
-    color: #0056b3;
+    color: #0076f4;
 }
 
 h1 {
@@ -106,7 +106,7 @@ button:hover {
     box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.8),inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.15);
     padding: 15px 30px 15px 30px;
     border-radius: 10px;
-    background-color: rgb(43, 43, 43);
+    background-color: rgb(35, 35, 35);
 }
 
 .blog-post-empty {

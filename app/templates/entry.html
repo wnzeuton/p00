@@ -11,16 +11,22 @@
     <header>
         <p><a href="/">Home</a></p>
         <h1>{{ entry_title }}</h1>
-        <h2>By {{ entry_author }}</h2>
-        <h2>Posted on {{ entry_date }}</h2>
-        
+        <h2>Posted by {{ entry_author }}</h2>
+        <div class="divider"></div>
+        <p>Created on {{ entry_date }}</p>
     </header>
-
+    <div class="divider"></div>
     <section class="entry-content">
         <p>{{ entry_content|safe }}</p>
     </section>
+    <div class="divider"></div>
     <section class = "entry-comments">
         <h2>Comments</h2>
+        <article class="blog-post-empty">
+            <img src="{{ url_for('static', filename='images/none.svg') }}" alt="No Comments" style="width: 30px; margin-right: 10px">
+            <p>No comments on this entry...</p>
+            <a href= "/" ><button>Add a Comment</button></a>
+        </article>
     </section>
 </body>
 </html>
