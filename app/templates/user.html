@@ -22,7 +22,7 @@
     {% for blog in blogs %}
         <article class="blog-post">
         <h3><a href = "/blogs/{{blog[0]}}">{{blog[1]}}</a></h3>
-        <p><b>By {{ blog[3] }}</b></p>
+        <p><b>By {{ blog[4] }}</b> in {{ blog[3] }}</p>
         <p>{{ blog[2] }}</p>
         </article>
     {% endfor %}

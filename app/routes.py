@@ -2,7 +2,7 @@ import sqlite3
 
 from flask import render_template, request, session, redirect
 from . import app
-from .auth import sign_in_state, password_hash, get_user
+from .auth import sign_in_state, password_hash, get_user, valid_username
 from .blog import fetch_blogs, insert_blog
 from .config import DB_FILE
 
@@ -91,6 +91,7 @@ def login():
             return render_template("login.html", message="No such user with that email")
         if password_hash(request.form.get('password'), user[3])[0] != user[2]:
             return render_template("login.html", message="Incorrect password")
+        
         session['user'] = user
         return redirect('/')
     return render_template("login.html", message=error)
@@ -111,6 +112,8 @@ def signup():
             error.append("Password must be at least 10 characters long")
         if password != confirm_password:
             error.append("Passwords do not match")
+        if not valid_username(request.form.get('username')):
+            error.append("Username shouldn't contain spaces or special characters")
         if not error:
             pwd_salt = password_hash(password, "")
             new_user = (request.form.get('username'), pwd_salt[0], pwd_salt[1], request.form.get('email'))
@@ -178,35 +181,79 @@ def settings():
     update = request.args.get('update') == 'true'
     req_type = request.args.get('type')
     error = []
+    valid_types = ['username', 'email', 'password']
+    if req_type not in valid_types and request.args:
+        request.args = None
+        return redirect('/settings')
+    if update and request.form.get(req_type) is not None:
+        form_info = request.form.get(req_type)
+        form_info2 = None
+        if req_type == 'password':
+            form_info = request.form.get('new_password')
+            form_info2 = request.form.get('confirm_password')
+        print("Updating " + req_type + " to " + form_info)
 
-    if update and request.method == 'POST' and req_type == 'password':
-        current_password = request.form.get('password')
-        new_password = request.form.get('new_password')
-        confirm_password = request.form.get('confirm_password')
-        user = session['user']
-        if password_hash(current_password, user[3])[0] != user[2]:
-            error.append("Incorrect current password")
-        if len(new_password) < 10:
-            error.append("New password must be at least 10 characters long")
-        if new_password != confirm_password:
+        error = []
+        if (password_hash(request.form.get('password'), session['user'][3])[0]) != session['user'][2]:
+            error.append("Incorrect password")
+        if form_info2 is not None and form_info2 != form_info:
             error.append("New passwords do not match")
-
-        if not error:
-            pwd_salt = password_hash(new_password, "")
-            conn = sqlite3.connect(DB_FILE)
-            c = conn.cursor()
-            try:
-                c.execute("UPDATE users SET password = ?, salt = ? WHERE id = ?", (pwd_salt[0], pwd_salt[1], user[0]))
-                conn.commit()
-                session['user'] = (user[0], user[1], pwd_salt[0], pwd_salt[1], user[4])
-                return redirect('/settings')
-            except sqlite3.Error as e:
-                error.append("An error occurred while updating the password")
+        if form_info2 is not None and len(request.form.get('new_password')) < 10:
+            error.append("Password must be at least 10 characters long")
+        if len(error) != 0:
+            return render_template("settings.html", update=update, type=req_type, username=session['user'][1],
+                                   email=session['user'][4], message=error)
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        try:
+            if req_type != 'password':
+                c.execute(f'''
+                            UPDATE users
+                            SET {req_type} = ?
+                            WHERE id = ?
+                        ''', (form_info, session['user'][0]))
+            else:
+                pwd = password_hash(form_info, "")
+                c.execute(f'''
+                            UPDATE users
+                            SET {req_type} = ?, salt = ?
+                            WHERE id = ?
+                        ''', (pwd[0], pwd[1], session['user'][0]))
+            print("attempting break through")
+        except sqlite3.IntegrityError:
+            error.append(f"An account with that {req_type} already exists")
+            print("already exists")
+            conn.rollback()
+        except sqlite3.Error as e:
+            error.append(f"ERROR: {e} - CONTACT DEVELOPERS FOR HELP")
+            print(e)
+            conn.rollback()
+        except Exception as e:
+            error.append(str(e))
+            conn.rollback()
+            print(e)
+        finally:
+            if len(error) == 0:
+                if req_type == 'username' and any(
+                        c in " `~!@#$%^&*()=+[]{\}\|,./<>?;\':\"" for c in request.form.get('username')):
+                    error.append("Username shouldn't contain spaces or special characters")
+            if len(error) != 0:
                 conn.rollback()
-            finally:
-                c.close()
-                conn.close()
-    return render_template("settings.html", username=session['user'][1], email=session['user'][4], update=update, type=req_type, message=error)
+            else:
+                conn.commit()
+                c.execute("SELECT * FROM users WHERE id = ?", (session['user'][0],))
+                result = c.fetchone()
+                session['user'] = result
+                print("Successful!")
+                return render_template('settings.html', update=False, type=None, username=session['user'][1],
+                                       email=session['user'][4], message=[f"Updated {req_type}!"])
+            c.close()
+            conn.close()
+            return render_template("settings.html", update=update, type=req_type, username=session['user'][1],
+                                   email=session['user'][4], message=error)
+    return render_template("settings.html", update=update, type=req_type, username=session['user'][1],
+                           email=session['user'][4])
+
 
 @app.route("/category", methods=['GET', 'POST'])
 def category():

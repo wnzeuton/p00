@@ -27,3 +27,6 @@ def password_hash(password, salt):
     if salt == "":
         salt = bcrypt.gensalt()
     return [bcrypt.hashpw(password.encode('utf-8'), salt), salt]
+
+def valid_username(username):
+    return not any(c in ' ~!@#$%^&*()`\\\'\";:[]{«‘“}|,<>/?' for c in username)
