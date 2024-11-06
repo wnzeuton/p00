@@ -10,7 +10,7 @@
 <body>
 
     <header>
-        <p><a href="{{ request.referrer or url_for('blog')}}">Back</a></p>
+        <p><a href="/">Home</a></p>
         <h1>{{ title }}</h1>
         <h2>Created by {{ author }}</h2>
         
@@ -22,10 +22,16 @@
         </div>
         <div class="divider"></div>
         <div class = "blog-entries">
+        <div class="entry-header">
             <h2>Entries</h2>
             {% if is_owner %}
-                <p><a href = "{{ url_for('create_entry', blog_id=blog_id)}}">Create new entry</a></p>
+                <a href = "{{ url_for('create_entry', blog_id=blog_id)}}" style="display: flex; justify-content: center; align-content: center; flex-wrap: wrap">
+                    <img src="{{ url_for('static', filename='images/add.svg') }}" alt="Add Entry" style="width: 30px; margin-right: 10px">
+                    <h2 style="color: #2773E4">Add</h2>
+                </a>
             {% endif %}
+        </div>
+            <p>Each entry is an individual article or post within your blog.</p>
             {% for entry in entries %}
                 <div class="blog-post">
                 <h3><a href = "{{ url_for('view_entry', blog_id=blog_id, entry_id=entry[0])}}" >{{entry[1]}}</a></h3>
