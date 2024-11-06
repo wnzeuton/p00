@@ -21,10 +21,8 @@ def fetch_blogs(categories_list):
     if categories_list is None:
         c.execute("SELECT title FROM categories")
         categories_list = [row[0] for row in c.fetchall()]
-
     c.execute('SELECT html FROM blogs')
     blogs_list = c.fetchall()
-    print(blogs_list)
     conn.close()
     return blogs_list, categories_list
 
@@ -33,21 +31,16 @@ def update_blogs():
     c = conn.cursor()
     c.execute("SELECT author_id FROM blogs")
     author_id_list = c.fetchall()
-    print(author_id_list)
     for author_id_tuple in author_id_list:
-        author_id = author_id_tuple[0]
-        c.execute("SELECT username FROM users WHERE id = ?", (author_id,))
-        username = c.fetchone()[0]
-        print(username)
-        c.execute("SELECT * FROM blogs WHERE author_id = ?", (author_id,))
-        row = c.fetchone()
-        print(row)
-        c.execute("SELECT title FROM categories WHERE id = ?", (row[3],))
-        category = c.fetchone()[0]
-        new_html = gen_html(row[1], username, category, row[2], row[0])
-        print(new_html)
-        c.execute("UPDATE blogs SET html = ? WHERE id = ?", (new_html, row[0]))
-        
+        for author_id in author_id_tuple:
+            c.execute("SELECT username FROM users WHERE id = ?", (author_id,))
+            username = c.fetchone()[0]
+            c.execute("SELECT * FROM blogs WHERE author_id = ?", (author_id,))
+            row = c.fetchone()
+            c.execute("SELECT title FROM categories WHERE id = ?", (row[3],))
+            category = c.fetchone()[0]
+            new_html = gen_html(row[1], username, category, row[2], row[0])
+            c.execute("UPDATE blogs SET html = ? WHERE author_id = ?", (new_html, author_id))
     conn.commit()
     conn.close()
 

@@ -33,7 +33,6 @@ def blog_detail(blog_id):
     entries = c.fetchall()
     conn.close()
     is_owner = (sign_in_state(session) and author_username[0] == session['user'][1])
-
     if blog_content:
         title, description, blog_description, author_id = blog_content
         return render_template("blogs/blog_post.html", is_owner = is_owner, title=title, description=description, content=blog_description, author = author_username[0], blog_id=blog_id, entries = entries)
