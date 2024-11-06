@@ -3,7 +3,7 @@ import sqlite3
 from flask import render_template, request, session, redirect
 from . import app
 from .auth import sign_in_state, get_user
-from .blog import fetch_blogs, insert_blog
+from .blog import fetch_blogs, insert_blog, update_blogs
 from .config import DB_FILE
 
 @app.route("/", methods=['GET', 'POST'])
@@ -14,6 +14,7 @@ def home():
 # BLOG PAGE (CONTAINS ALL POSTS)
 @app.route("/blogs", methods=['GET', 'POST'])
 def blog(categories_list=None):
+    update_blogs()
     if request.method == 'POST':
         insert_blog(request.form, session)
     blogs_list, categories_list = fetch_blogs(categories_list)

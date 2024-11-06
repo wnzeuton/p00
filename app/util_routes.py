@@ -136,6 +136,7 @@ def settings():
                             SET {req_type} = ?
                             WHERE id = ?
                         ''', (form_info, session['user'][0]))
+                
             else:
                 pwd = password_hash(form_info, "")
                 c.execute(f'''
