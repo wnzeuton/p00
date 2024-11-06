@@ -53,7 +53,7 @@ def create_entry(blog_id):
     entry_content = request.form.get('content')
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    c.execute("INSERT INTO posts (title, author_id, blog_id, content) VALUES (?, ?, ?, ?)", (entry_title, author_id, blog_id, entry_content))
+    c.execute("INSERT INTO posts (title, author_id, blog_id, content) VALUES (?, ?, ?, ?)", (entry_title, author_id, blog_id, entry_content.replace('\n', "<br>")))
     conn.commit()
     conn.close()
     print("inserted post")

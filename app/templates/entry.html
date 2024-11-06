@@ -9,16 +9,17 @@
 </head>
 <body>
     <header>
-        <p><a href="{{ request.referrer or url_for('blog_detail', blog_id=blog_id)}}">Go back</a></p>
+        <p><a href="{{ url_for('blog_detail', blog_id=blog_id)}}">Go back</a></p>
         <h1>{{ entry_title }}</h1>
         <h2>By {{ entry_author }}</h2>
         <h2>Posted on {{ entry_date }}</h2>
         
     </header>
-
+    <hr style="border-color: royalblue;">
     <section class="entry-content">
-        <p>{{ entry_content }}</p>
+        <p>{{ entry_content|safe }}</p>
     </section>
+    <hr style="border-color: royalblue;">
     <section class = "entry-comments">
         <h2>Comments</h2>
     </section>
