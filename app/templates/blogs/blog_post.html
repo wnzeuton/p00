@@ -31,7 +31,7 @@
                 </a>
             {% endif %}
         </div>
-            <p>Each entry is an individual article or post within your blog.</p>
+            <p>Each entry is an individual article or post within this blog.</p>
             {% for entry in entries %}
                 <div class="blog-post">
                 <h3><a href = "{{ url_for('view_entry', blog_id=blog_id, entry_id=entry[0])}}" >{{entry[1]}}</a></h3>

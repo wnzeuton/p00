@@ -17,7 +17,7 @@
     <div class="left-section">
     <h2>Create Blog</h2>
     {% if guest %}
-        <p>You must be logged in to create blogs</p>
+        <p>You must be logged in to create blogs.</p>
     {% else %}
         <section>
             <form method="POST" action="/blogs">
@@ -30,8 +30,7 @@
                     <textarea name="description" required></textarea>
                 </div>
                 <div>
-                    <label for="category">Category</label>
-                    <select name="category" id="category">
+                    <select name="category" id="category" style="width: 100%; margin-bottom: 5px;">
                         {% for category in categories %}
                             <option value="{{ category }}">{{ category }}</option>
                         {% endfor %}
@@ -45,7 +44,7 @@
     {% endif %}
     </div>
     <div class="right-section">
-        <h2>All Blogs</h2>
+        <h2 style="margin-bottom: 49px">Blogs</h2>
         {% for blog in blogs %}
             <article class="blog-post">
                 {{ blog[0] | safe }}
