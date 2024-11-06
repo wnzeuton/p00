@@ -10,14 +10,33 @@
 <body>
 <h1>{{ username }}</h1>
 <h2> {{ email }}</h2>
-<h3><a href="/settings?update=true&type=username">Change username</a> | <a href="/settings?update=true&type=email">Change
-    email</a> | <a href="/settings?update=true&type=password">Change password</a> | <a href="/logout">Log out</a> | <a
-        href="/user/{{ username }}">Back to Profile</a></h3>
+<div style="margin-bottom: 20px; width: 100%; display: flex; justify-content: space-between; flex-wrap: wrap">
+    <div style="display: flex; gap: 10px">
+        <a href="/settings?update=true&type=username">
+            <button>Change username</button>
+        </a>
+        <a href="/settings?update=true&type=email">
+            <button>Change email</button>
+        </a>
+        <a href="/settings?update=true&type=password">
+            <button>Change password</button>
+        </a>
+    </div>
+    <div style="display: flex; gap: 10px">
+        <a href="/logout">
+            <button>Log out</button>
+        </a>
+        <a href="/user/{{ username }}">
+            <button>Back to Profile</button>
+        </a>
+    </div>
+</div>
 {% for error in message %}
     <p>{{ error }}</p>
 {% endfor %}
 {% if update == true %}
-    <p>Update user info | <a href="/settings">Cancel</a></p>
+    <article class="blog-post-empty">
+    <h3 style="margin-top: -3px">Updating user information...</h3>
 
     <form action="/settings?update=true&type={{ type }}" method="POST">
         {% if type == "username" %}
@@ -41,6 +60,10 @@
         </label><br>
         <button type="submit" name="sub1">Confirm</button>
     </form>
+        <a href="/settings">
+            <button style="width: 350px;">Cancel</button>
+        </a>
+    </article>
 {% endif %}
 </body>
 </html>
