@@ -30,8 +30,11 @@ Hey fellow Devos!
 - Step 3: Install the required packages by running ```pip3 install -r requirements.txt``` in the terminal. Consider activating a virtual environment and installing the libraries there.
 
 ## Launch code
+
+Ensure you are in the parent folder (e.g., ../p00/) NOT (../p00/app/)  
+
 ```
-python3 __init__.py
+flask run
 ```
 
 If needed, set up the database by running the following commands in the terminal:

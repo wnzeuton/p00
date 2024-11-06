@@ -76,3 +76,5 @@ yinweiZ - 2024-11-05 17:42
 HTML tags, Look and feel improvements, profile buttons, more flexboxes, category page update
 yinweiZ - 2024-11-05 22:00
 Styling fixes, nav flow, new logo, empty blog link to create new, link fixes, new buttons, icons
+timN - 2024-11-06 11:20
+Fixed launch code in README.md
