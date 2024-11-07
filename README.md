@@ -12,7 +12,6 @@
   - Final Testing and Bug Fixes
 - Tim Ng
   - Post Editing and Deleting
-  - Comment system
 - YinWei Zhang
   - Organized file and middleware structure
   - Creating Blogs
