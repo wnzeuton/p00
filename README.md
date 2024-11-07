@@ -31,13 +31,16 @@ Hey fellow Devos!
 
 ## Launch code
 
-Ensure you are in the parent folder (e.g., ../p00/) NOT (../p00/app/)  
+First, set up the database by running the following commands in the terminal:
+```
+python3 setup_db.py
+```
+
+Then, ensure you are in the parent folder (e.g., ../p00/) NOT (../p00/app/) and run the app:
 
 ```
 flask run
 ```
 
-If needed, set up the database by running the following commands in the terminal:
-```
-python3 setup_db.py
-```
+Note: To turn on debug mode you can add a ```--debug``` tag after ```flask run```
+
