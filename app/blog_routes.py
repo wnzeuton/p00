@@ -123,9 +123,29 @@ def view_entry(blog_id, entry_id):
     return render_template('blogs/entry.html', entry_title = entry_title, entry_author = entry_author, entry_date = entry_date, blog_id = blog_id, blog_name = blog_name, entry_content = entry_content)
 
 # EDIT AND CREATE POSTS
-@app.route("/edit")
-def edit():
-    return render_template("blogs/editpost.html")
+@app.route("/blogs/<int:blog_id>/<int:entry_id>/edit", methods=['GET', 'POST'])
+def edit_post(entry_id):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT title, date, author_id, content FROM posts WHERE id = ?", (entry_id,))
+    entry = c.fetchone()
+    if entry:
+        entry_title, entry_date, entry_author, entry_content = entry
+    else:
+        return redirect(f'/blogs/{blog_id}')
+    is_owner = (sign_in_state(session) and entry_author == session['user'][0])
+    if not is_owner:
+        return redirect(f'/blogs/{blog_id}')
+    if request.method == 'POST':
+        updated_title = request.form.get('title')
+        updated_content = request.form.get('content')
+        c.execute("UPDATE posts SET title = ?, content = ? WHERE id = ?", (updated_title, updated_content, entry_id))
+        conn.commit()
+        conn.close()
+        return redirect(f'/blogs/{blog_id}/{entry_id}')  # Redirect back to the entry page
+
+    conn.close()
+    return render_template("blogs/edit_entry.html", blog_id=blog_id, entry_id=entry_id, title=entry_title, content=entry_content)
 
 @app.route("/category", methods=['GET', 'POST'])
 def category():
