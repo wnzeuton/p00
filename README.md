@@ -1,4 +1,23 @@
 # p00 - bxlobog by lobo
+## Roster
+-  Will Nzeuton (Project Manager)
+  - User Authentication
+  - Creating Blog Entries
+  - Built Database
+  - Final Testing and Bug Fixes
+- Daniel Park
+  - Setup Flask and SQLITE3 Environment
+  - Creating and Deleting Blogs
+  - Built Database
+  - Final Testing and Bug Fixes
+- Tim Ng
+  - Post Editing and Deleting
+  - Comment system
+- YinWei Zhang
+  - Organized file and middleware structure
+  - Creating Blogs
+  - Frontend (HTML and CSS)
+
 ## Description
 This project is a web app that we built using Python and SQLite to allow users to create and view blog posts. When starting the app, you will be brought to the home page in which you have three options: logging in, creating an account, and viewing the blog page as a guest. In order to create or edit said post, you must have and be logged in to your account. Each blog has its own respective category, title, and creator listed to allow for greater sortability. We already have one blog post created by our lord and savior PM Nzueton to show off our code. 
 
