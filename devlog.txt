@@ -84,4 +84,5 @@ danielP -- 2024-11-06 21:23
 Blog entries can be deleted
 willN -- 2024-11-06 21:27
 User accounts can be deleted
-
+danielP -- 2024-11-06 21:32
+Blogs can be deleted and blogs are made dynamically according to database info.
