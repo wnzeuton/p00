@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title> Edit Entry </title>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
+</head>
+<body>
+<p><a href="/">Home</a></p>
+<section class="centered-login">
+<h1 style="text-align: center">Editing Entry </h1>
+<form method="POST" action="./edit">
+    <div>
+        <label for="content">Entry Content: </label>
+        <input type="text" name="content" required>
+    </div>
+</form>
+    </section>
+</body>
+</html>

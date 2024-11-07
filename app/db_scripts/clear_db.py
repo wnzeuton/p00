@@ -9,7 +9,7 @@ from app.config import DB_FILE
 def clear_database():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    tables = ['users', 'categories', 'posts', 'comments', 'blogs']
+    tables = ['users', 'categories', 'posts', 'blogs']
     try:
         for table in tables:
             c.execute(f'DELETE FROM {table};')

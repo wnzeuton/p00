@@ -121,14 +121,16 @@ def view_entry(blog_id, entry_id):
     else:
         return redirect(f'/blogs/{blog_id}')
     entry_author = get_user("id", entry_author)[1]
+    is_owner = sign_in_state(session) and entry_author == session['user'][1]
     c.execute("SELECT title FROM blogs WHERE id =?", (blog_id,))
     blog_name = c.fetchone()[0]
     conn.close()
-    return render_template('blogs/entry.html', entry_title = entry_title, entry_author = entry_author, entry_date = entry_date, blog_id = blog_id, blog_name = blog_name, entry_content = entry_content)
+    return render_template('blogs/entry.html', entry_title = entry_title, entry_author = entry_author, entry_date = entry_date, blog_id = blog_id, blog_name = blog_name, entry_content = entry_content, entry_id = entry_id, is_owner = is_owner)
 
 # EDIT AND CREATE POSTS
-@app.route("/edit")
-def edit():
+@app.route("/blogs/<int:blog_id>/<int:entry_id>/edit")
+def edit_entry(blog_id, entry_id):
+    # fix
     return render_template("blogs/editpost.html")
 
 @app.route("/category", methods=['GET', 'POST'])
