@@ -128,10 +128,27 @@ def view_entry(blog_id, entry_id):
     return render_template('blogs/entry.html', entry_title = entry_title, entry_author = entry_author, entry_date = entry_date, blog_id = blog_id, blog_name = blog_name, entry_content = entry_content, entry_id = entry_id, is_owner = is_owner)
 
 # EDIT AND CREATE POSTS
-@app.route("/blogs/<int:blog_id>/<int:entry_id>/edit")
+@app.route("/blogs/<int:blog_id>/<int:entry_id>/edit", methods=['GET', 'POST'])
 def edit_entry(blog_id, entry_id):
-    # fix
-    return render_template("blogs/editpost.html")
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT title, content FROM posts WHERE id = ?", (entry_id,))
+    entry = c.fetchone()
+    entry_title, entry_content = entry
+    if request.method == 'POST':
+        new_title = request.form.get('title')
+        new_content = request.form.get('content')
+        c.execute("""
+            UPDATE posts
+            SET title = ?, content = ?
+            WHERE id = ?
+        """, (new_title, new_content.replace('\n', "<br>"), entry_id))
+        conn.commit()
+        conn.close()
+        return redirect(f'/blogs/{blog_id}/{entry_id}')  # Redirect to the updated entry page
+    conn.close()
+    return render_template("blogs/editpost.html", blog_id=blog_id, entry_id=entry_id, entry_title=entry_title, entry_content=entry_content)
+
 
 @app.route("/category", methods=['GET', 'POST'])
 def category():
