@@ -1,9 +1,14 @@
+# Will Nzeuton, Tim Ng, Daniel Park, Yinwei Zhang
+# Team lobo
+# SoftDev
+# p00 -- scenario 2
+# 2024-11-07
 import sqlite3
 
 from flask import render_template, request, session, redirect
 from . import app
 from .auth import sign_in_state, get_user, password_hash
-from .blog import fetch_blogs, insert_blog, delete_blogs
+from .blog import fetch_categories, insert_blog, delete_blogs
 from .config import DB_FILE
 
 @app.route("/", methods=['GET', 'POST'])
@@ -16,7 +21,7 @@ def home():
 def blog(categories_list=None):
     if request.method == 'POST':
         insert_blog(request.form, session)
-    categories_list = fetch_blogs(categories_list)
+    categories_list = fetch_categories(categories_list)
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
 
@@ -33,7 +38,6 @@ def blog(categories_list=None):
             conn.commit()
             continue
         author_name = result[0]
-
         category_id = blog[3]
         c.execute("SELECT title FROM categories WHERE id = ?", (category_id,))
         result = c.fetchone()

@@ -1,3 +1,8 @@
+# Will Nzeuton, Tim Ng, Daniel Park, Yinwei Zhang
+# Team lobo
+# SoftDev
+# p00 -- scenario 2
+# 2024-11-07
 import sqlite3
 
 from flask import render_template, request, session, redirect
@@ -76,12 +81,13 @@ def user_profile(username):
                 SELECT * FROM blogs WHERE author_id = ?
             ''', (user_id,))
             blogs = c.fetchall()
-            for i in range(len(blogs)):
-                cat_id = blogs[i][3]
+            blogs_list = []
+            for blog in blogs:
+                cat_id = blog[3]
                 c.execute("SELECT title FROM categories WHERE id = ?", (cat_id,))
                 cat_title = c.fetchone()
-                usr_blog = (blogs[i][0], blogs[i][1], blogs[i][2], cat_title[0], username, blogs[i][5])
-                blogs[i] = usr_blog
+                usr_blog = (blog[0], blog[1], blog[2], cat_title[0], username)
+                blogs_list.append(usr_blog)
                 
             c.execute('''
                 SELECT * FROM comments WHERE author_id = ?
@@ -97,7 +103,7 @@ def user_profile(username):
     finally:
         c.close()
         conn.close()
-    return render_template("utilities/user.html", owns_account = owns_account, user = user, blogs = blogs, comments = comments)
+    return render_template("utilities/user.html", owns_account = owns_account, user = user, blogs = blogs_list, comments = comments)
 
 @app.route("/settings", methods=['GET', 'POST'])
 def settings():

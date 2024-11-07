@@ -1,3 +1,9 @@
+# Will Nzeuton, Tim Ng, Daniel Park, Yinwei Zhang
+# Team lobo
+# SoftDev
+# p00 -- scenario 2
+# 2024-11-07
+
 import sqlite3
 import os
 
