@@ -60,19 +60,6 @@ CREATE TABLE IF NOT EXISTS posts (
 );
 ''')
 
-# COMMENTS TABLE
-c.execute('''
-CREATE TABLE IF NOT EXISTS comments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    content TEXT,
-    date DATE DEFAULT CURRENT_TIMESTAMP,
-    author_id INTEGER,
-    post_id INTEGER,
-    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
-    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
-);
-''')
-
 categories_list = [
     "Art/Music",
     "Technology",
