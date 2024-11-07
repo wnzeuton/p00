@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-DB_FILE = os.path.join(os.path.dirname(__file__), "xase.db")
+DB_FILE = os.path.join(os.path.dirname(__file__), "../xase.db")
 
 db = sqlite3.connect(DB_FILE)
 c = db.cursor()
@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS blogs (
     description TEXT,
     category_id INTEGER,
     author_id INTEGER,
-    html TEXT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
 );

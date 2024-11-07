@@ -47,7 +47,14 @@
         <h2 style="margin-bottom: 49px">Blogs</h2>
         {% for blog in blogs %}
             <article class="blog-post">
-                {{ blog[0] | safe }}
+                <div>
+                    <h2><a href="/blogs/{{blog[0]}}">{{blog[1]}}</a></h2>
+                    <p><b>
+                    Created by <a href = "/user/{{blog[2]}}">{{blog[2]}}</a>
+                     in {{blog[3]}}
+                    </b></p>
+                    <p>{{blog[4]}}</p>
+                </div>
             </article>
         {% endfor %}
     </div>
