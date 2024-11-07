@@ -10,7 +10,7 @@ p00 -- scenario 2
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog entry</title>
+    <title>Blog Entry</title>
     <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" type="text/css">
     <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
 </head>
@@ -22,10 +22,13 @@ p00 -- scenario 2
         <div class="divider"></div>
         <p>Created on {{ entry_date }}</p>
     </header>
+
     <div class="divider"></div>
+    
     <section class="entry-content">
         <p>{{ entry_content|safe }}</p>
     </section>
+
     <div class="divider"></div>
     {% if is_owner %}
         <a href = "{{ url_for('edit_entry', blog_id=blog_id, entry_id=entry_id)}}" style="display: flex; justify-content: center; align-content: center; flex-wrap: wrap">

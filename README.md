@@ -12,7 +12,7 @@
   - Final Testing and Bug Fixes
 - Tim Ng
   - Post Editing and Deleting
-  - Comment system
+  - Performed majority of housekeeping (README.md, etc)
 - YinWei Zhang
   - Organized file and middleware structure
   - Creating Blogs
