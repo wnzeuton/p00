@@ -35,3 +35,10 @@ def insert_blog(form, session):
             conn.rollback()
         finally:
             conn.close()
+
+def delete_blogs(blog_id):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("DELETE FROM blogs WHERE id = ?", (blog_id,))
+    conn.commit()
+    conn.close()

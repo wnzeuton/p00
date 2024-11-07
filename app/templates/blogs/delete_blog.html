@@ -1,0 +1,27 @@
+<html>
+<head>
+    <title> Delete Blog Confirmation </title>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://use.typekit.net/gma7sba.css" rel="stylesheet">
+</head>
+<body>
+<p><a href="/">Home</a></p>
+<section class="centered-login">
+<h1 style="text-align: center">Deleting Blog {{blog_name}} Confirmation</h1>
+<form method="POST" action="./delete">
+    <div>
+        <label for="title">Confirm Blog Title Name</label>
+        <input type="text" name="title" required>
+    </div>
+    <label>
+        Password
+        <input type="password" name="password" required>
+    </label><br>
+    <button type="submit" name="sub1">Confirm</button>
+</form>
+    {% for error in message %}
+        <p style="text-align: center; color: red">{{ error }}</p>
+    {% endfor %}
+    </section>
+</body>
+</html>

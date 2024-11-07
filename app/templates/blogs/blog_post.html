@@ -29,6 +29,10 @@
                     <img src="{{ url_for('static', filename='images/icons/add.svg') }}" alt="Add Entry" style="width: 30px; margin-right: 10px">
                     <h2 style="color: #2773E4">Add</h2>
                 </a>
+                <a href = "{{ url_for('delete_blog', blog_id=blog_id)}}" style="display: flex; justify-content: center; align-content: center; flex-wrap: wrap">
+                    <img src="{{ url_for('static', filename='images/icons/trash.svg') }}" alt="Delete Blog" style="width: 30px; margin-right: 10px">
+                    <h2 style="color: rgb(222, 23, 23)">Delete</h2>
+                </a>
             {% endif %}
         </div>
             {% if entries %}

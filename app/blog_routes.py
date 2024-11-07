@@ -2,8 +2,8 @@ import sqlite3
 
 from flask import render_template, request, session, redirect
 from . import app
-from .auth import sign_in_state, get_user
-from .blog import fetch_blogs, insert_blog
+from .auth import sign_in_state, get_user, password_hash
+from .blog import fetch_blogs, insert_blog, delete_blogs
 from .config import DB_FILE
 
 @app.route("/", methods=['GET', 'POST'])
@@ -61,6 +61,29 @@ def blog_detail(blog_id):
         return render_template("blogs/blog_post.html", is_owner = is_owner, title=title, description=description, author = author_username[0], blog_id=blog_id, entries = entries)
     else:
         return render_template("404.html"), 404
+
+@app.route("/blogs/<int:blog_id>/delete", methods=['GET', 'POST'])
+def delete_blog(blog_id):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT title, author_id FROM blogs WHERE id = ?", (blog_id,))
+    title, author_id = c.fetchone()
+    conn.close()
+    if not sign_in_state(session) or author_id != session['user'][0]:
+        return redirect('/')
+    if not request.form:
+        return render_template("blogs/delete_blog.html", blog_name = title)
+    if request.method == "POST":
+        message = []
+        if request.form.get('title') != title:
+            message.append("Incorrect Title Name")
+        if password_hash(request.form.get('password'), session['user'][3])[0] != session['user'][2]:
+            message.append("Incorrect Password")
+        if len(message) == 0:
+            delete_blogs(blog_id)
+        else:
+            return render_template('blogs/delete_blog.html', blog_name = title, message = message)
+    return redirect(f'/blogs')
 
 @app.route("/blogs/<int:blog_id>/create", methods=['GET', 'POST'])
 def create_entry(blog_id):
