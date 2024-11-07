@@ -58,23 +58,30 @@ yinweiZ – 2024-11-03 22:00
 Split main Python file and project structure into two
 yinweiZ – 2024-11-03 22:30
 Reorganized xase.db placement, and fixed the two xases saved at diff places
-yinweiZ – 2024-11-03 22:50
+yinweiZ –- 2024-11-03 22:50
 Fixed blog content rendering issue and fixed xase.db location
-yinweiZ – 2024-11-03 23:25
+yinweiZ –- 2024-11-03 23:25
 Applied CSS styling + HTML refs
-yinweiZ – 2024-11-03 23:40
+yinweiZ –- 2024-11-03 23:40
 Reformatted code and improved HTML structure greatly
-timN - 2024-11-04 04:25
+timN -- 2024-11-04 04:25
 Worked on README.md to add project description
-yinweiZ - 2024-11-04 11:47
+yinweiZ -- 2024-11-04 11:47
 Improved naming conventions, cleaned up code, and fixed xase references that created two xase.db files again
-yinweiZ - 2024-11-04 23:12
+yinweiZ -- 2024-11-04 23:12
 Update LAF, individual blog page, xase.db issue again, get user name, refactor into smaller files
-yinweiZ - 2024-11-05 12:29
+yinweiZ -- 2024-11-05 12:29
 Update styling en masse, sticky scrolling, added category page, fixed UX flows, and profile button
-yinweiZ - 2024-11-05 17:42
+yinweiZ -- 2024-11-05 17:42
 HTML tags, Look and feel improvements, profile buttons, more flexboxes, category page update
-yinweiZ - 2024-11-05 22:00
+yinweiZ -- 2024-11-05 22:00
 Styling fixes, nav flow, new logo, empty blog link to create new, link fixes, new buttons, icons
-timN - 2024-11-06 11:20
+timN -- 2024-11-06 11:20
 Fixed launch code in README.md
+willN -- 2024-11-06 12:26
+Blog entries can now be made
+danielP -- 2024-11-06 21:23
+Blog entries can be deleted
+willN -- 2024-11-06 21:27
+User accounts can be deleted
+
