@@ -29,6 +29,9 @@
         <a href="/user/{{ username }}">
             <button>Back to Profile</button>
         </a>
+        <a href ="/settings?update=true&type=delete">
+            <button style="background-color: rgb(173, 0, 0)">Delete account</button>
+        </a>
     </div>
 </div>
 {% for error in message %}
@@ -54,6 +57,13 @@
             <label>
                 <input type="password" name="confirm_password" placeholder="confirm new password" required>
             </label><br>
+        {% elif type == "delete" %}
+            <label>
+                <p>
+                    Input username to confirm account deletion
+                </p>
+                <input type="text" name="delete" placeholder={{username}} required>
+            </label>
         {% endif %}
         <label>
             <input type="password" name="password" placeholder="current password" required>

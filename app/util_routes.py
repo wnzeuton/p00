@@ -106,7 +106,7 @@ def settings():
 
     update = request.args.get('update') == 'true'
     req_type = request.args.get('type')
-    valid_types = ['username', 'email', 'password']
+    valid_types = ['username', 'email', 'password', 'delete']
     if req_type not in valid_types and request.args:
         return redirect('/settings')
     if update and request.form.get(req_type) is not None:
@@ -115,7 +115,6 @@ def settings():
         if req_type == 'password':
             form_info = request.form.get('new_password')
             form_info2 = request.form.get('confirm_password')
-        print("Updating " + req_type + " to " + form_info)
 
         error = []
         if (password_hash(request.form.get('password'), session['user'][3])[0]) != session['user'][2]:
@@ -124,40 +123,48 @@ def settings():
             error.append("New passwords do not match")
         if form_info2 is not None and len(request.form.get('new_password')) < 10:
             error.append("Password must be at least 10 characters long")
+        if(req_type == "delete" and form_info != session['user'][1]):
+            error.append("Incorrect username")
         if len(error) != 0:
             return render_template("utilities/settings.html", update=update, type=req_type, username=session['user'][1],
                                    email=session['user'][4], message=error)
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         try:
-            if req_type != 'password':
+            if req_type != 'password' and req_type != 'delete':
                 c.execute(f'''
                             UPDATE users
                             SET {req_type} = ?
                             WHERE id = ?
                         ''', (form_info, session['user'][0]))
                 
-            else:
+            elif req_type != 'delete':
                 pwd = password_hash(form_info, "")
                 c.execute(f'''
                             UPDATE users
                             SET {req_type} = ?, salt = ?
                             WHERE id = ?
                         ''', (pwd[0], pwd[1], session['user'][0]))
-            print("attempting break through")
+            else:
+                c.execute("DELETE FROM users WHERE id = ?", (session['user'][0],))
+                session['user'] = None
+ 
         except sqlite3.IntegrityError:
             error.append(f"An account with that {req_type} already exists")
-            print("already exists")
             conn.rollback()
         except sqlite3.Error as e:
             error.append(f"ERROR: {e} - CONTACT DEVELOPERS FOR HELP")
-            print(e)
+
             conn.rollback()
         except Exception as e:
             error.append(str(e))
             conn.rollback()
             print(e)
         finally:
+            if not session['user']:
+                conn.commit()
+                conn.close()
+                return redirect('/')
             if len(error) == 0:
                 if req_type == 'username' and any(
                         c in " `~!@#$%^&*()=+[]{\}\|,./<>?;\':\"" for c in request.form.get('username')):
@@ -171,10 +178,10 @@ def settings():
                 session['user'] = result
                 print("Successful!")
                 return render_template('utilities/settings.html', update=False, type=None, username=session['user'][1],
-                                       email=session['user'][4], message=[f"Updated {req_type}!"])
+                                        email=session['user'][4], message=[f"Updated {req_type}!"])
             c.close()
             conn.close()
             return render_template("utilities/settings.html", update=update, type=req_type, username=session['user'][1],
-                                   email=session['user'][4], message=error)
+                                    email=session['user'][4], message=error)
     return render_template("utilities/settings.html", update=update, type=req_type, username=session['user'][1],
                            email=session['user'][4])

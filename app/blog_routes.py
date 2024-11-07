@@ -2,8 +2,8 @@ import sqlite3
 
 from flask import render_template, request, session, redirect
 from . import app
-from .auth import sign_in_state, get_user
-from .blog import fetch_blogs, insert_blog, update_blogs
+from .auth import sign_in_state, get_user, password_hash
+from .blog import fetch_blogs, insert_blog, delete_blogs
 from .config import DB_FILE
 
 @app.route("/", methods=['GET', 'POST'])
@@ -14,10 +14,33 @@ def home():
 # BLOG PAGE (CONTAINS ALL POSTS)
 @app.route("/blogs", methods=['GET', 'POST'])
 def blog(categories_list=None):
-    update_blogs()
     if request.method == 'POST':
         insert_blog(request.form, session)
-    blogs_list, categories_list = fetch_blogs(categories_list)
+    categories_list = fetch_blogs(categories_list)
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM blogs")
+
+    blogs = c.fetchall()
+    blogs_list = []
+    for blog in blogs:
+        author_id = blog[4]
+        c.execute("SELECT username FROM users WHERE id = ?", (author_id,))
+        result = c.fetchone()
+        if not result:
+            c.execute("DELETE FROM blogs WHERE author_id = ?", (author_id,))
+            conn.commit()
+            continue
+        author_name = result[0]
+
+        category_id = blog[3]
+        c.execute("SELECT title FROM categories WHERE id = ?", (category_id,))
+        result = c.fetchone()
+        category_title = result[0]
+        blogs_list.append([blog[0], blog[1], author_name, category_title, blog[2]])
+
+    conn.close()
     return render_template("blogs/all_blogs.html", guest=not sign_in_state(session), blogs=blogs_list, categories=categories_list)
 
 @app.route("/blogs/<int:blog_id>")
@@ -25,19 +48,42 @@ def blog_detail(blog_id):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     # Fetch the specific blog post by ID
-    c.execute("SELECT title, description, html, author_id FROM blogs WHERE id = ?", (blog_id,))
+    c.execute("SELECT title, description, author_id FROM blogs WHERE id = ?", (blog_id,))
     blog_content = c.fetchone()
-    c.execute("SELECT username FROM users WHERE id = ?", (blog_content[3],))
+    c.execute("SELECT username FROM users WHERE id = ?", (blog_content[2],))
     author_username = c.fetchone()
     c.execute("SELECT * FROM posts WHERE blog_id=?",(blog_id,))
     entries = c.fetchall()
     conn.close()
     is_owner = (sign_in_state(session) and author_username[0] == session['user'][1])
     if blog_content:
-        title, description, blog_description, author_id = blog_content
-        return render_template("blogs/blog_post.html", is_owner = is_owner, title=title, description=description, content=blog_description, author = author_username[0], blog_id=blog_id, entries = entries)
+        title, description, author_id = blog_content
+        return render_template("blogs/blog_post.html", is_owner = is_owner, title=title, description=description, author = author_username[0], blog_id=blog_id, entries = entries)
     else:
         return render_template("404.html"), 404
+
+@app.route("/blogs/<int:blog_id>/delete", methods=['GET', 'POST'])
+def delete_blog(blog_id):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT title, author_id FROM blogs WHERE id = ?", (blog_id,))
+    title, author_id = c.fetchone()
+    conn.close()
+    if not sign_in_state(session) or author_id != session['user'][0]:
+        return redirect('/')
+    if not request.form:
+        return render_template("blogs/delete_blog.html", blog_name = title)
+    if request.method == "POST":
+        message = []
+        if request.form.get('title') != title:
+            message.append("Incorrect Title Name")
+        if password_hash(request.form.get('password'), session['user'][3])[0] != session['user'][2]:
+            message.append("Incorrect Password")
+        if len(message) == 0:
+            delete_blogs(blog_id)
+        else:
+            return render_template('blogs/delete_blog.html', blog_name = title, message = message)
+    return redirect(f'/blogs')
 
 @app.route("/blogs/<int:blog_id>/create", methods=['GET', 'POST'])
 def create_entry(blog_id):
