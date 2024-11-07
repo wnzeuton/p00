@@ -6,7 +6,7 @@
 import sqlite3
 from .config import DB_FILE
 
-def fetch_blogs(categories_list):
+def fetch_categories(categories_list):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     if categories_list is None:
