@@ -1,10 +1,10 @@
 # p00 - bxlobog by lobo
 ## Roster
 -  Will Nzeuton (Project Manager)
-  - User Authentication
-  - Creating Blog Entries
-  - Built Database
-  - Final Testing and Bug Fixes
+    - User Authentication
+    - Creating Blog Entries
+    - Built Database
+    - Final Testing and Bug Fixes
 - Daniel Park
   - Setup Flask and SQLITE3 Environment
   - Creating and Deleting Blogs
